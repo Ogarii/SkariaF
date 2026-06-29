@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Apply to onboard your care center on oneMedicare." />
+  <title>Onboard a center | oneMedicare</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header" data-site-header data-active="onboard"></header>
+
+  <main>
+    <div class="container page-header">
+      <p class="eyebrow">Application</p>
+      <h1>Onboard your center.</h1>
+      <p class="lede">Complete the steps below to submit a center application. Submission is mocked. No data is sent to a server.</p>
+    </div>
+
+    <div class="container apply-layout">
+      <nav class="step-nav" id="stepNav" aria-label="Application steps">
+        <button type="button" class="step-nav-item is-active" data-step="0">
+          <span class="step-num">01</span>
+          <span class="step-title">Center details</span>
+        </button>
+        <button type="button" class="step-nav-item" data-step="1">
+          <span class="step-num">02</span>
+          <span class="step-title">Categories &amp; services</span>
+        </button>
+        <button type="button" class="step-nav-item" data-step="2">
+          <span class="step-num">03</span>
+          <span class="step-title">Contact</span>
+        </button>
+        <button type="button" class="step-nav-item" data-step="3">
+          <span class="step-num">04</span>
+          <span class="step-title">Review</span>
+        </button>
+      </nav>
+
+      <div class="form-panel">
+        <form id="onboardForm" novalidate>
+          <div class="form-step">
+            <p class="step-eyebrow">Step 01</p>
+            <h2>Tell us about your center</h2>
+            <p class="step-intro">Basic information used to provision your tenant schema and public directory listing.</p>
+            <div class="form-grid form-grid--2">
+              <div class="field" id="centerNameField">
+                <label for="centerName">Center name</label>
+                <input id="centerName" name="centerName" type="text" required placeholder="e.g. Skaria" autocomplete="organization" />
+                <p class="field-error">Center name is required.</p>
+              </div>
+              <div class="field" id="centerSlugField">
+                <label for="centerSlug">URL slug</label>
+                <input id="centerSlug" name="centerSlug" type="text" required placeholder="e.g. skaria" pattern="[a-z0-9-]+" />
+                <p class="field-hint">Lowercase letters, numbers, and hyphens only.</p>
+                <p class="field-error">A valid slug is required.</p>
+              </div>
+              <div class="field" id="centerEmailField">
+                <label for="centerEmail">Contact email</label>
+                <input id="centerEmail" name="centerEmail" type="email" required placeholder="hello@yourcenter.com" autocomplete="email" />
+                <p class="field-error">A valid email is required.</p>
+              </div>
+              <div class="field">
+                <label for="centerLocation">Location</label>
+                <input id="centerLocation" name="centerLocation" type="text" placeholder="City, State" />
+              </div>
+            </div>
+            <div class="field" style="margin-top:1.5rem">
+              <label for="centerTagline">Tagline</label>
+              <input id="centerTagline" name="centerTagline" type="text" placeholder="A short description for the directory" />
+            </div>
+            <div class="form-actions">
+              <span></span>
+              <button type="button" class="btn btn-primary" id="nextStep">Continue →</button>
+            </div>
+          </div>
+
+          <div class="form-step" hidden>
+            <p class="step-eyebrow">Step 02</p>
+            <h2>Categories &amp; services</h2>
+            <p class="step-intro">Select every practice type your center offers. Centers may carry multiple categories.</p>
+            <div id="categoryGrid"></div>
+            <p class="field-error" id="categoryError" hidden style="margin-top:1rem">Select at least one category.</p>
+
+            <h3 style="margin-top:2rem;font-size:1.1rem">Initial services</h3>
+            <p class="step-intro" style="margin-top:0.5rem">Add the services you'd like visible at launch.</p>
+            <div class="dynamic-list" id="serviceList"></div>
+            <button type="button" class="add-row-btn" id="addService">+ Add another service</button>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="prevStep">← Back</button>
+              <button type="button" class="btn btn-primary" id="nextStep">Continue →</button>
+            </div>
+          </div>
+
+          <div class="form-step" hidden>
+            <p class="step-eyebrow">Step 03</p>
+            <h2>Primary contact</h2>
+            <p class="step-intro">Who should we reach for provisioning and onboarding support?</p>
+            <div class="form-grid form-grid--2">
+              <div class="field">
+                <label for="contactName">Contact name</label>
+                <input id="contactName" name="contactName" type="text" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="contactPhone">Phone</label>
+                <input id="contactPhone" name="contactPhone" type="tel" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="prevStep">← Back</button>
+              <button type="button" class="btn btn-primary" id="nextStep">Review application →</button>
+            </div>
+          </div>
+
+          <div class="form-step" hidden>
+            <p class="step-eyebrow">Step 04</p>
+            <h2>Review &amp; submit</h2>
+            <p class="step-intro">Confirm your details before submitting. In production this would provision a new tenant.</p>
+            <div id="reviewPanel"></div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="prevStep">← Back</button>
+              <button type="submit" class="btn btn-primary">Submit application</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="success-panel" id="onboardSuccess" hidden>
+          <div class="success-stamp" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L19 7"/></svg>
+          </div>
+          <h2>Application received</h2>
+          <span class="ref-code" id="refCode">APP-XXXX</span>
+          <p class="success-copy">Your application has been recorded locally. In a connected app this would <code>POST /api/v1/tenants</code> and begin schema provisioning.</p>
+          <ul class="next-steps">
+            <li>Platform team reviews your categories and services</li>
+            <li>Tenant schema <code>tenant_&lt;slug&gt;</code> is provisioned</li>
+            <li>Practitioner accounts and scheduling go live</li>
+          </ul>
+          <pre class="pre" id="successPayload" style="margin-top:1.5rem;text-align:left;font-size:0.78rem;overflow:auto;padding:1rem;background:var(--color-paper-deep);border:1px solid var(--color-line);border-radius:var(--radius-sm)"></pre>
+          <a href="centers.html" class="btn btn-primary">Browse directory</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer></footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

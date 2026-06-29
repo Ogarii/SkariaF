@@ -1,0 +1,589 @@
+/* =================================================================
+   centers.css — Page-specific design for the Centers directory.
+   All rules scoped to #centersPage so styles.css is untouched.
+   Inspired by: editorial typography, dark search bar, floating
+   white cards with category accent stripe, bold stat numerals.
+   ================================================================= */
+
+/* -----------------------------------------------------------------
+   HERO — dark editorial panel, large display heading
+   ----------------------------------------------------------------- */
+#centersPage .centers-hero {
+  background: linear-gradient(140deg, #161e14 0%, #243020 55%, #2f3d28 100%);
+  position: relative;
+  overflow: hidden;
+  padding-bottom: var(--space-9);
+}
+
+/* warm ambient glow */
+#centersPage .centers-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 80% at 75% 40%, rgba(194, 118, 46, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(70, 88, 63, 0.35) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#centersPage .centers-hero .hero-grid { position: relative; z-index: 1; }
+
+#centersPage .centers-hero .eyebrow { color: var(--color-amber); }
+
+#centersPage .centers-hero h1 {
+  color: #fff;
+  font-size: clamp(3rem, 2rem + 4.5vw, 5.8rem);
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+}
+
+#centersPage .centers-hero h1 em { color: var(--color-amber); font-style: normal; }
+
+#centersPage .centers-hero .lede { color: rgba(238, 240, 231, 0.72); }
+
+/* search row — floating white pill */
+#centersPage .centers-hero-search {
+  margin-top: var(--space-7);
+  gap: var(--space-3);
+}
+
+#centersPage .search-field--hero {
+  background: #fff;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.32);
+  padding: 0.9em 1.5em;
+  font-size: 1rem;
+}
+
+#centersPage .search-field--hero svg { color: var(--color-amber); width: 18px; height: 18px; }
+#centersPage .search-field--hero input { font-size: 1rem; color: var(--color-ink); }
+#centersPage .search-field--hero input::placeholder { color: var(--color-ink-faint); }
+
+#centersPage .centers-hero .btn-primary {
+  border-radius: 50px;
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  padding: 0.9em 2.2em;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 20px rgba(194, 118, 46, 0.45);
+}
+#centersPage .centers-hero .btn-primary:hover {
+  background: var(--color-amber-deep);
+  border-color: var(--color-amber-deep);
+  box-shadow: 0 6px 24px rgba(147, 85, 31, 0.5);
+}
+
+/* hero stats row */
+#centersPage .centers-hero .hero-meta {
+  border-top-color: rgba(238, 240, 231, 0.16);
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+}
+
+#centersPage .centers-hero .hero-meta-item .num {
+  color: #fff;
+  font-size: 2.4rem;
+  letter-spacing: -0.02em;
+}
+
+#centersPage .centers-hero .hero-meta-item .label { color: rgba(238, 240, 231, 0.5); }
+
+/* -----------------------------------------------------------------
+   STAT STRIP — full dark bar, oversized numerals
+   ----------------------------------------------------------------- */
+#centersPage .stat-strip {
+  background: var(--color-ink);
+  border-bottom: 1px solid rgba(238, 240, 231, 0.1);
+}
+
+#centersPage .stat-strip-item {
+  border-right-color: rgba(238, 240, 231, 0.1);
+  padding-block: var(--space-7);
+}
+
+#centersPage .stat-strip-item .num {
+  color: #fff;
+  font-size: clamp(2.6rem, 2rem + 2vw, 4rem);
+  letter-spacing: -0.03em;
+}
+
+#centersPage .stat-strip-item .label {
+  color: rgba(238, 240, 231, 0.45);
+  font-size: 0.7rem;
+  margin-top: var(--space-2);
+}
+
+/* -----------------------------------------------------------------
+   CATEGORY TILES — clean cards, inverted on hover
+   ----------------------------------------------------------------- */
+#centersPage .category-tile {
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1.5px solid var(--color-line-soft);
+  padding: var(--space-6) var(--space-5);
+  gap: var(--space-3);
+  transition: background 0.24s var(--ease), border-color 0.24s var(--ease), transform 0.24s var(--ease), box-shadow 0.24s var(--ease);
+}
+
+#centersPage .category-tile:hover,
+#centersPage .category-tile:focus-visible {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px -12px rgba(22, 32, 26, 0.4);
+}
+
+#centersPage .category-tile:hover h3,
+#centersPage .category-tile:focus-visible h3 { color: #fff; }
+
+#centersPage .category-tile:hover .category-short,
+#centersPage .category-tile:focus-visible .category-short { color: rgba(238, 240, 231, 0.6); }
+
+#centersPage .category-tile:hover .category-icon,
+#centersPage .category-tile:focus-visible .category-icon {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+}
+
+#centersPage .category-tile:hover .category-count,
+#centersPage .category-tile:focus-visible .category-count {
+  border-top-color: rgba(238, 240, 231, 0.15);
+  color: var(--color-amber);
+}
+
+/* -----------------------------------------------------------------
+   DIRECTORY TOOLBAR — dark capsule with filters + search
+   ----------------------------------------------------------------- */
+#centersPage .directory-toolbar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--color-ink);
+  border: none;
+  border-radius: 16px;
+  padding: var(--space-5) var(--space-5);
+  margin-bottom: var(--space-7);
+  box-shadow: 0 4px 28px rgba(22, 32, 26, 0.2);
+  grid-template-columns: unset;
+  padding-inline: var(--space-6);
+}
+
+#centersPage .toolbar-label {
+  color: rgba(238, 240, 231, 0.4);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+}
+
+#centersPage .toolbar-block--filters {
+  flex: 1;
+  min-width: 0;
+  padding-right: var(--space-5);
+}
+
+#centersPage .toolbar-block--filters .filter-pills {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+
+#centersPage .toolbar-block--filters .filter-pills::-webkit-scrollbar { display: none; }
+
+#centersPage .filter-pill {
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-color: rgba(238, 240, 231, 0.2);
+  color: rgba(238, 240, 231, 0.65);
+  background: transparent;
+  font-size: 0.8rem;
+  padding: 0.5em 1.1em;
+  transition: all 0.16s var(--ease);
+}
+
+#centersPage .filter-pill:hover {
+  border-color: rgba(238, 240, 231, 0.55);
+  color: #fff;
+}
+
+#centersPage .filter-pill.is-active,
+#centersPage .filter-pill[data-category].is-active {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(194, 118, 46, 0.5);
+}
+
+#centersPage .toolbar-block--search {
+  flex-shrink: 0;
+  width: 280px;
+  border-left: 1px solid rgba(238, 240, 231, 0.1);
+  padding-left: var(--space-5);
+}
+
+#centersPage .toolbar-block--search .search-field {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(238, 240, 231, 0.18);
+  border-radius: 10px;
+  min-width: 0;
+  width: 100%;
+  transition: border-color 0.16s var(--ease), background 0.16s var(--ease);
+}
+
+#centersPage .toolbar-block--search .search-field:focus-within {
+  border-color: var(--color-amber);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#centersPage .toolbar-block--search .search-field svg { color: rgba(238, 240, 231, 0.4); }
+
+#centersPage .toolbar-block--search .search-field input {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+#centersPage .toolbar-block--search .search-field input::placeholder { color: rgba(238, 240, 231, 0.35); }
+#centersPage .toolbar-block--search .search-field input:focus { outline: none; }
+
+/* -----------------------------------------------------------------
+   DIRECTORY META — inline badge under toolbar
+   ----------------------------------------------------------------- */
+#centersPage .directory-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-left-width: 1px;
+  border-radius: var(--radius-full);
+  padding: 0.35em 1em;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+  letter-spacing: 0.01em;
+  margin-bottom: var(--space-5);
+}
+
+#centersPage .directory-meta::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------
+   CENTER CARDS — floating white cards with category accent stripe
+   ----------------------------------------------------------------- */
+#centersPage .center-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+#centersPage .center-card {
+  background: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow:
+    0 1px 3px rgba(22, 32, 26, 0.06),
+    0 12px 36px -10px rgba(22, 32, 26, 0.16);
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Category accent stripe at top */
+#centersPage .center-card::before {
+  content: "";
+  display: block;
+  height: 5px;
+  width: 100%;
+  background: var(--cat-color, var(--color-amber));
+  flex-shrink: 0;
+}
+
+#centersPage .center-card:hover,
+#centersPage .center-card:focus-within {
+  transform: translateY(-10px);
+  box-shadow:
+    0 4px 12px rgba(22, 32, 26, 0.08),
+    0 28px 60px -14px rgba(22, 32, 26, 0.28);
+  border: none;
+}
+
+/* featured card highlight */
+#centersPage .center-card.is-featured::before { background: var(--color-amber); }
+#centersPage .center-card.is-featured {
+  box-shadow:
+    0 1px 3px rgba(194, 118, 46, 0.12),
+    0 16px 48px -10px rgba(194, 118, 46, 0.26);
+}
+#centersPage .center-card.is-featured::after {
+  content: "Featured";
+  position: absolute;
+  top: 18px;
+  right: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-amber-deep);
+  background: rgba(194, 118, 46, 0.12);
+  border: 1px solid rgba(194, 118, 46, 0.35);
+  border-radius: var(--radius-full);
+  padding: 0.2em 0.65em;
+}
+#centersPage .center-card.is-featured { position: relative; }
+
+/* card inner sections with consistent padding */
+#centersPage .card-top {
+  padding: var(--space-5) var(--space-5) 0;
+  align-items: center;
+}
+
+#centersPage .card-top .catalog-tag { color: var(--color-ink-faint); font-size: 0.68rem; }
+
+#centersPage .card-stamp {
+  width: 38px;
+  height: 38px;
+  border-color: var(--cat-color, var(--color-amber));
+  color: var(--cat-color, var(--color-amber));
+  background: rgba(255, 255, 255, 0.9);
+  border-style: solid;
+  border-width: 1.5px;
+  transform: none;
+  flex-shrink: 0;
+}
+
+#centersPage .center-card:hover .card-stamp,
+#centersPage .center-card:focus-within .card-stamp { transform: none; }
+
+#centersPage .center-card h3 {
+  padding: 0 var(--space-5);
+  font-size: 1.3rem;
+  margin-top: var(--space-3);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+#centersPage .center-card h3 a {
+  color: var(--color-ink);
+  transition: color 0.16s;
+}
+
+#centersPage .center-card h3 a:hover { color: var(--color-amber-deep); }
+
+/* location line */
+#centersPage .card-location {
+  padding: 0 var(--space-5);
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-faint);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#centersPage .card-location::before {
+  content: "↗";
+  font-size: 0.65rem;
+  color: var(--cat-color, var(--color-amber));
+  font-style: normal;
+}
+
+/* tagline */
+#centersPage .center-card .card-tagline {
+  padding: 0 var(--space-5);
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+  margin-top: var(--space-3);
+  line-height: 1.55;
+  min-height: 2.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* category pills */
+#centersPage .center-card .pill-row {
+  padding: 0 var(--space-5);
+  margin-top: var(--space-4);
+}
+
+#centersPage .center-card .pill {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  font-size: 0.65rem;
+}
+
+/* stats highlight row */
+#centersPage .card-highlights {
+  padding: 0 var(--space-5);
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+#centersPage .card-highlights span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #f7f8f3;
+  border: 1px solid #e8e9df;
+  border-radius: 12px;
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-faint);
+}
+
+#centersPage .card-highlights strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* card footer */
+#centersPage .card-footer {
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  margin-top: var(--space-5);
+  border-top: 1px solid #f0f1eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+#centersPage .card-rating {
+  font-size: 0.82rem;
+  color: var(--color-ink-soft);
+  gap: var(--space-1);
+  align-items: center;
+}
+
+#centersPage .card-rating .star {
+  font-size: 0.9rem;
+  color: var(--color-amber);
+}
+
+#centersPage .card-reviews {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+}
+
+/* CTA button */
+#centersPage .card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5em 1.1em;
+  background: var(--color-ink);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background 0.16s var(--ease), transform 0.16s var(--ease);
+  position: relative;
+  z-index: 2;
+}
+
+#centersPage .card-link:hover {
+  background: var(--color-amber-deep);
+  text-decoration: none;
+  transform: translateX(3px);
+}
+
+/* -----------------------------------------------------------------
+   TESTIMONIALS — tighter on dark band
+   ----------------------------------------------------------------- */
+#centersPage .testimonial-card {
+  background: #fff;
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(22, 32, 26, 0.05), 0 12px 32px -10px rgba(22, 32, 26, 0.12);
+}
+
+/* -----------------------------------------------------------------
+   CTA BANNER — bolder, dark background version
+   ----------------------------------------------------------------- */
+#centersPage .cta-banner {
+  background: var(--color-ink);
+  border-color: rgba(238, 240, 231, 0.12);
+  color: var(--color-paper);
+}
+
+#centersPage .cta-banner .eyebrow { color: var(--color-amber); }
+#centersPage .cta-banner h2 { color: #fff; }
+#centersPage .cta-banner p { color: rgba(238, 240, 231, 0.7); }
+
+#centersPage .cta-banner .btn-primary {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  border-radius: 50px;
+}
+#centersPage .cta-banner .btn-primary:hover {
+  background: var(--color-amber-deep);
+  border-color: var(--color-amber-deep);
+}
+
+#centersPage .cta-banner .btn-ghost {
+  color: rgba(238, 240, 231, 0.8);
+  border-color: rgba(238, 240, 231, 0.3);
+  border-radius: 50px;
+}
+#centersPage .cta-banner .btn-ghost:hover {
+  color: #fff;
+  border-color: rgba(238, 240, 231, 0.7);
+}
+
+/* -----------------------------------------------------------------
+   RESPONSIVE
+   ----------------------------------------------------------------- */
+@media (max-width: 980px) {
+  #centersPage .center-grid { grid-template-columns: repeat(2, 1fr); }
+  #centersPage .directory-toolbar {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    gap: var(--space-5);
+  }
+  #centersPage .toolbar-block--filters { padding-right: 0; }
+  #centersPage .toolbar-block--search {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(238, 240, 231, 0.1);
+    padding-left: 0;
+    padding-top: var(--space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  #centersPage .center-grid { grid-template-columns: 1fr; }
+  #centersPage .centers-hero h1 { font-size: clamp(2.6rem, 1.8rem + 5vw, 4rem); }
+  #centersPage .stat-strip-item .num { font-size: 2.4rem; }
+  #centersPage .card-highlights { grid-template-columns: 1fr 1fr; }
+}

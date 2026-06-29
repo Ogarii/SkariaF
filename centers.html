@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover holistic, wellness, psychology, and therapy centers on oneMedicare. Find care near you or list your practice." />
+  <title>Find your center | oneMedicare</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/centers.css" />
+</head>
+<body id="centersPage">
+  <header class="site-header" data-site-header data-active="centers"></header>
+
+  <main>
+    <section class="centers-hero hero section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Center directory</p>
+          <h1>Find care that fits your whole life.</h1>
+          <p class="lede">
+            Browse integrative practices, wellness studios, and specialty clinics on oneMedicare.
+            Every center runs on its own secure tenant with the categories that match how they practice.
+          </p>
+          <div class="centers-hero-search">
+            <label class="search-field search-field--hero" for="heroSearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+              <span class="visually-hidden">Search centers</span>
+              <input type="search" id="heroSearch" placeholder="Search by name, city, or specialty…" autocomplete="off" />
+            </label>
+            <a href="#browse" class="btn btn-primary">Browse all centers</a>
+          </div>
+          <div class="hero-meta" id="centersHeroMeta" aria-label="Directory highlights"></div>
+        </div>
+        <div class="hero-scene-wrap">
+          <div class="hero-scene" id="centersHeroScene" data-hero-scene tabindex="0" aria-label="Interactive center preview. Move pointer to explore centers.">
+            <div class="hero-scene__ambient" aria-hidden="true">
+              <span class="hero-orb hero-orb--a"></span>
+              <span class="hero-orb hero-orb--b"></span>
+              <span class="hero-orb hero-orb--c"></span>
+              <span class="hero-scene__grid"></span>
+            </div>
+            <div class="hero-scene__stage" data-scene-stage>
+              <div class="hero-scene__orbit" data-scene-orbit role="listbox" aria-label="Select a center"></div>
+              <article class="glass-core" data-glass-core aria-live="polite"></article>
+            </div>
+            <p class="hero-scene__hint" aria-hidden="true">Move to explore · Click a card</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stat-strip" aria-label="Platform statistics">
+      <div class="container stat-strip-inner" id="centersStats"></div>
+    </section>
+
+    <section class="section section--tight band-paper-deep">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Specialties</p>
+          <h2>Explore by category.</h2>
+          <p>Jump straight into the type of care you need. Centers can belong to one or many categories.</p>
+        </div>
+        <div class="category-grid" id="centersCategoryStrip"></div>
+      </div>
+    </section>
+
+    <section class="section" id="browse">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Directory</p>
+          <h2>All centers on the platform.</h2>
+          <p>Filter, search, and open a full profile with services, team, products, and contact options.</p>
+        </div>
+
+        <div class="directory-toolbar" aria-label="Directory controls">
+          <div class="toolbar-block toolbar-block--filters">
+            <p class="toolbar-label">Filter by category</p>
+            <div role="group" aria-label="Filter by category" class="filter-pills" id="filterPills"></div>
+          </div>
+          <div class="toolbar-block toolbar-block--search">
+            <p class="toolbar-label">Search directory</p>
+            <label class="search-field" for="centerSearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+              <span class="visually-hidden">Search centers</span>
+              <input type="search" id="centerSearch" placeholder="Search by center, city, or specialty" autocomplete="off" />
+            </label>
+          </div>
+        </div>
+
+        <p class="directory-meta" id="directoryMeta" aria-live="polite"></p>
+        <div class="center-grid" id="centerGrid"></div>
+
+        <div class="empty-state" id="emptyState" aria-hidden="true">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M8 11h6M11 8v6"/></svg>
+          </div>
+          <h3>No centers match</h3>
+          <p>Try clearing your filters or searching with a different term.</p>
+          <button type="button" class="btn btn-ghost" id="clearFilters">Clear filters</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band-paper-deep">
+      <div class="container">
+        <div class="section-head section-head--center reveal">
+          <p class="eyebrow">Trusted by practitioners</p>
+          <h2>Centers growing on oneMedicare.</h2>
+        </div>
+        <div class="testimonial-grid" id="centersTestimonials"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="centersContact">
+      <div class="container contact-split reveal">
+        <div class="contact-split-copy">
+          <p class="eyebrow">Get in touch</p>
+          <h2>Questions about listing your center?</h2>
+          <p class="lede">Reach the oneMedicare team by form, Gmail, or WhatsApp. All channels open with your message pre-filled.</p>
+          <div class="channel-buttons" id="platformChannelBtns"></div>
+        </div>
+        <div class="contact-split-form sidebar-card" id="platformContactForm"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight">
+      <div class="container">
+        <div class="cta-banner reveal">
+          <p class="eyebrow">Ready to launch?</p>
+          <h2>Your center belongs on oneMedicare.</h2>
+          <p>Apply in minutes. Multi-category support, tenant isolation, and a profile patients can trust.</p>
+          <div class="cta-actions">
+            <a href="onboard.html" class="btn btn-primary">Start application</a>
+            <a href="iskaria.html" class="btn btn-ghost">See Skaria example</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer></footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
