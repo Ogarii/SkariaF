@@ -87,7 +87,7 @@
             <span>Skaria</span>
           </nav>
           <div class="skaria-logo-wrap">
-            <img src="https://skaria.netlify.app/images/logo.png" alt="Skaria Medical" class="skaria-logo-img" />
+            <img src="assets/skaria-logo.png" alt="Skaria Medical" class="skaria-logo-img" />
           </div>
           <p class="skaria-subbrand">oneMedicare &middot; CTR-001</p>
           <h1 class="skaria-title">Skaria<em>Medical Center</em></h1>
