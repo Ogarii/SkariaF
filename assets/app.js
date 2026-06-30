@@ -13,7 +13,7 @@
   function featuredCenter() { return CENTERS.find((c) => c.featured) || CENTERS[0]; }
   function centerProfileHref(center) {
     return center.slug === "skaria"
-      ? "iskaria.html"
+      ? "skaria.html"
       : `center.html?slug=${encodeURIComponent(center.slug)}`;
   }
 
@@ -227,7 +227,7 @@
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="centers.html">Center directory</a></li>
-            <li><a href="iskaria.html">Skaria profile</a></li>
+            <li><a href="skaria.html">Skaria profile</a></li>
           </ul>
         </div>
         <div class="footer-col">
