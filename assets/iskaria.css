@@ -444,6 +444,15 @@
   margin-bottom: var(--space-5);
   box-shadow: 0 2px 8px rgba(22, 32, 26, 0.05), 0 10px 28px -10px rgba(22, 32, 26, 0.1);
 }
+#centerProfile[data-center-slug="skaria"] .founder-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  flex-shrink: 0;
+  border: 2px solid var(--sk-teal);
+}
 #centerProfile[data-center-slug="skaria"] .founder-label {
   font-family: var(--font-mono);
   font-size: 0.66rem;
@@ -457,6 +466,22 @@
   font-size: 0.9rem;
   color: var(--color-ink-soft);
   line-height: 1.68;
+}
+
+/* Share button */
+#centerProfile[data-center-slug="skaria"] .skaria-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(46, 207, 192, 0.45);
+  color: rgba(20, 70, 80, 0.80);
+}
+#centerProfile[data-center-slug="skaria"] .skaria-share-btn:hover {
+  border-color: var(--sk-teal);
+  color: var(--sk-teal);
+  background: rgba(46, 207, 192, 0.08);
 }
 
 /* Specialties strip */
@@ -783,10 +808,33 @@
   font-weight: 600;
   font-size: 1.2rem;
 }
+#centerProfile[data-center-slug="skaria"] .team-photo {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  display: block;
+}
 #centerProfile[data-center-slug="skaria"] .team-card h3 { font-size: 1.1rem; margin-top: var(--space-4); }
 #centerProfile[data-center-slug="skaria"] .team-card .role { color: var(--color-amber-deep); font-size: 0.84rem; font-weight: 600; margin-top: 2px; }
 #centerProfile[data-center-slug="skaria"] .team-card .credentials { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--color-ink-faint); text-transform: uppercase; margin-top: var(--space-1); }
 #centerProfile[data-center-slug="skaria"] .team-card .bio { font-size: 0.86rem; line-height: 1.62; color: var(--color-ink-soft); margin-top: var(--space-3); }
+#centerProfile[data-center-slug="skaria"] .team-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-4);
+  padding: 0.4em 1.1em;
+  border-radius: var(--radius-full);
+  background: #0077b5;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .team-linkedin:hover { background: #005f8e; }
 
 /* ─────────────────────────────────────────────────────────────────
    TESTIMONIALS — 3-column grid

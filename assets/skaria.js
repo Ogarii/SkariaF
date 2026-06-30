@@ -98,6 +98,10 @@
             <a class="btn btn-amber" href="#shop">Browse shop</a>
             <a class="btn btn-outline-light" href="#services">View services</a>
             <a class="btn btn-outline-light" href="#contact">Contact us</a>
+            <button class="btn btn-outline-light skaria-share-btn" id="skariaShareBtn" aria-label="Share this page">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Share
+            </button>
           </div>
         </div>
 
@@ -184,9 +188,12 @@
           </div>
           ${founderText ? `
           <div class="founder-strip">
-            <span class="founder-label">Founder</span>
-            <p class="founder-body">${founderText}</p>
-          </div>` : ""}
+            ${pracs[0] && pracs[0].photo ? `<img src="${pracs[0].photo}" alt="${pracs[0].firstName} ${pracs[0].lastName}" class="founder-photo" />` : ''}
+            <div>
+              <span class="founder-label">Founder</span>
+              <p class="founder-body">${founderText}</p>
+            </div>
+          </div>` : ''}
           ${specialtyText ? `
           <div class="specialties-strip">
             <p class="specialties-label">Specialties include</p>
@@ -270,11 +277,18 @@
             pracs.length
               ? pracs.map((p) => `
                 <article class="team-card">
-                  <div class="team-avatar" aria-hidden="true">${p.firstName[0]}${p.lastName[0]}</div>
+                  ${p.photo
+                    ? `<img src="${p.photo}" alt="${p.firstName} ${p.lastName}" class="team-photo" />`
+                    : `<div class="team-avatar" aria-hidden="true">${p.firstName[0]}${p.lastName[0]}</div>`
+                  }
                   <h3>${p.firstName} ${p.lastName}</h3>
                   <p class="role">${p.role}</p>
                   <p class="credentials">${p.credentials}</p>
                   <p class="bio">${p.bio}</p>
+                  ${p.linkedin ? `<a class="team-linkedin" href="${p.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="${p.firstName} on LinkedIn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                  </a>` : ''}
                 </article>`).join("")
               : `<p class="tab-empty">Practitioner profiles coming soon.</p>`
           }</div>
@@ -352,6 +366,27 @@
     `;
 
     initScrollSpy();
+
+    // Share button
+    const shareBtn = document.getElementById("skariaShareBtn");
+    if (shareBtn) {
+      shareBtn.addEventListener("click", async () => {
+        const shareData = {
+          title: "Skaria Medical Center | oneMedicare",
+          text: "Check out Skaria Medical Center — holistic telehealth blending African herbalism and Western clinical medicine.",
+          url: window.location.href,
+        };
+        if (navigator.share) {
+          try { await navigator.share(shareData); } catch (_) {}
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+          shareBtn.textContent = "Link copied!";
+          setTimeout(() => {
+            shareBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share`;
+          }, 2000);
+        }
+      });
+    }
   }
 
   document.addEventListener("DOMContentLoaded", init);

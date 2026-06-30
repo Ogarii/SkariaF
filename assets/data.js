@@ -280,24 +280,8 @@ const PRACTITIONERS = [
     role: "Family Nurse Practitioner and Founder",
     credentials: "MSN, FNP",
     bio: "Over 15 years of clinic experience with strengths in chronic disease management, telehealth delivery, and holistic primary care.",
-  },
-  {
-    id: "pr-sk-2",
-    centerSlug: "skaria",
-    firstName: "Grace",
-    lastName: "Wanjiru",
-    role: "Herbal Wellness Specialist",
-    credentials: "BHN",
-    bio: "Supports safe use of African botanical blends for weight, metabolic, and hormone wellness programs.",
-  },
-  {
-    id: "pr-sk-3",
-    centerSlug: "skaria",
-    firstName: "Samuel",
-    lastName: "Otieno",
-    role: "Integrative Nutrition Coach",
-    credentials: "CNC",
-    bio: "Guides clients through realistic nutrition and herbal routines for blood sugar, blood pressure, and digestive support.",
+    photo: "assets/nelly-mwaniki.jpg",
+    linkedin: "https://www.linkedin.com/in/nelly-mwaniki-914309281",
   },
 ];
 
