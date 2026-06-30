@@ -6,8 +6,8 @@
 
 /* Skaria brand color overrides — teal replaces amber site-wide */
 #centerProfile[data-center-slug="skaria"] {
-  --color-amber:       #F5C542;
-  --color-amber-deep:  #D4A017;
+  --color-amber:       #2ECFC0;   /* redirected → teal */
+  --color-amber-deep:  #22B0A3;   /* redirected → teal-deep */
   --sk-teal:           #2ECFC0;
   --sk-teal-deep:      #22B0A3;
   --sk-teal-glow:      rgba(46, 207, 192, 0.22);
@@ -1450,5 +1450,256 @@
     min-height: 80px;
     flex-direction: row;
     gap: var(--space-3);
+  }
+}
+
+/* =================================================================
+   TYPOGRAPHY NORMALIZATION — 2 sizes only
+   Labels / meta / mono eyebrows → 0.72 rem
+   All body / supporting text    → 0.90 rem
+   ================================================================= */
+
+/* — labels, tags, eyebrows, mono metadata — */
+#centerProfile[data-center-slug="skaria"] .vm-label,
+#centerProfile[data-center-slug="skaria"] .about-kpi-label,
+#centerProfile[data-center-slug="skaria"] .founder-label,
+#centerProfile[data-center-slug="skaria"] .specialties-label,
+#centerProfile[data-center-slug="skaria"] .stats-vision-eye,
+#centerProfile[data-center-slug="skaria"] .rating-count,
+#centerProfile[data-center-slug="skaria"] .stat-row .label,
+#centerProfile[data-center-slug="skaria"] .profile-stats-card .contact-list dt,
+#centerProfile[data-center-slug="skaria"] .exp-tag,
+#centerProfile[data-center-slug="skaria"] .skaria-tab,
+#centerProfile[data-center-slug="skaria"] .profile-hero .pill,
+#centerProfile[data-center-slug="skaria"] .shop-cat,
+#centerProfile[data-center-slug="skaria"] .service-dur,
+#centerProfile[data-center-slug="skaria"] .team-card .credentials,
+#centerProfile[data-center-slug="skaria"] .blog-card-meta,
+#centerProfile[data-center-slug="skaria"] .emvi-badge,
+#centerProfile[data-center-slug="skaria"] .emvi-tag,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-label,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-date,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-read,
+#centerProfile[data-center-slug="skaria"] .eyebrow,
+#centerProfile[data-center-slug="skaria"] .sk-footer-col h4 { font-size: 0.72rem; }
+
+/* — body / supporting copy — */
+#centerProfile[data-center-slug="skaria"] .vm-body,
+#centerProfile[data-center-slug="skaria"] .skaria-tagline,
+#centerProfile[data-center-slug="skaria"] .stats-vision-body,
+#centerProfile[data-center-slug="skaria"] .profile-stats-card .contact-list dd,
+#centerProfile[data-center-slug="skaria"] .profile-stats-card .contact-list a,
+#centerProfile[data-center-slug="skaria"] .founder-body,
+#centerProfile[data-center-slug="skaria"] .specialties-body,
+#centerProfile[data-center-slug="skaria"] .integrates-strip p,
+#centerProfile[data-center-slug="skaria"] .contact-blurb,
+#centerProfile[data-center-slug="skaria"] .service-card p,
+#centerProfile[data-center-slug="skaria"] .shop-card p,
+#centerProfile[data-center-slug="skaria"] .team-card .bio,
+#centerProfile[data-center-slug="skaria"] .team-card .role,
+#centerProfile[data-center-slug="skaria"] .testimonial-card blockquote,
+#centerProfile[data-center-slug="skaria"] .testimonial-card footer,
+#centerProfile[data-center-slug="skaria"] .blog-card p,
+#centerProfile[data-center-slug="skaria"] .shop-empty,
+#centerProfile[data-center-slug="skaria"] .tab-empty,
+#centerProfile[data-center-slug="skaria"] .emvi-p-desc,
+#centerProfile[data-center-slug="skaria"] .emvi-h-desc,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-desc,
+#centerProfile[data-center-slug="skaria"] .sk-footer-col li,
+#centerProfile[data-center-slug="skaria"] .sk-footer-col p,
+#centerProfile[data-center-slug="skaria"] .sk-footer-tagline { font-size: 0.9rem; }
+
+/* =================================================================
+   SKARIA HEADER — replaces oneMedicare shared header on this page   ================================================================= */
+#centerProfile[data-center-slug="skaria"] .site-header {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(46, 207, 192, 0.20);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f3040;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+#centerProfile[data-center-slug="skaria"] .sk-brand em {
+  font-style: normal;
+  color: var(--sk-teal);
+}
+#centerProfile[data-center-slug="skaria"] .sk-nav-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+#centerProfile[data-center-slug="skaria"] .site-header .nav-link {
+  font-size: 0.88rem;
+  color: rgba(15, 48, 64, 0.65);
+}
+#centerProfile[data-center-slug="skaria"] .site-header .nav-link:hover,
+#centerProfile[data-center-slug="skaria"] .site-header .nav-link.is-active {
+  color: #0f3040;
+}
+#centerProfile[data-center-slug="skaria"] .site-header .nav-link::after {
+  background: var(--sk-teal);
+}
+
+#centerProfile[data-center-slug="skaria"] .site-header .btn-amber {
+  background: var(--sk-teal);
+  border-color: var(--sk-teal);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(46, 207, 192, 0.35);
+}
+#centerProfile[data-center-slug="skaria"] .site-header .btn-amber:hover {
+  background: var(--sk-teal-deep);
+  border-color: var(--sk-teal-deep);
+}
+
+/* =================================================================
+   SKARIA FOOTER — standalone Skaria-branded footer
+   ================================================================= */
+#centerProfile[data-center-slug="skaria"] .site-footer {
+  background: #0a1f28;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-body);
+  padding: 0;
+  border-top: none;
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-8);
+  padding-top: var(--space-9);
+  padding-bottom: var(--space-8);
+  align-items: start;
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  object-fit: contain;
+  margin-bottom: var(--space-4);
+  display: block;
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-3);
+}
+#centerProfile[data-center-slug="skaria"] .sk-footer-name em {
+  font-style: normal;
+  color: var(--sk-teal);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-tagline {
+  font-size: 0.88rem;
+  line-height: 1.62;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 30ch;
+  margin-bottom: var(--space-5);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-socials {
+  display: flex;
+  gap: var(--space-3);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-social {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(46, 207, 192, 0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.65);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .sk-footer-social:hover {
+  border-color: var(--sk-teal);
+  color: var(--sk-teal);
+  background: rgba(46, 207, 192, 0.10);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.40);
+  margin-bottom: var(--space-4);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-col li,
+#centerProfile[data-center-slug="skaria"] .sk-footer-col p {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.60);
+  line-height: 1.55;
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-col a {
+  color: rgba(255, 255, 255, 0.60);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .sk-footer-col a:hover {
+  color: var(--sk-teal);
+}
+
+#centerProfile[data-center-slug="skaria"] .sk-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+#centerProfile[data-center-slug="skaria"] .sk-footer-bottom .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+  font-size: 0.80rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 920px) {
+  #centerProfile[data-center-slug="skaria"] .sk-footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+  #centerProfile[data-center-slug="skaria"] .sk-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  #centerProfile[data-center-slug="skaria"] .sk-footer-inner {
+    grid-template-columns: 1fr;
+  }
+  #centerProfile[data-center-slug="skaria"] .sk-footer-bottom .container {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
   }
 }

@@ -58,7 +58,7 @@
     const pracs    = (PRACTITIONERS || []).filter((p) => p.centerSlug === "skaria");
     const reviews  = (TESTIMONIALS  || []).filter((t) => t.centerSlug === "skaria");
 
-    document.title = "Skaria Medical Center | oneMedicare";
+    document.title = "Skaria Medical Center";
 
     const ov = center.overview || [];
     const visionText     = (ov.find((p) => /^Vision:/i.test(p))      || "").replace(/^Vision:\s*/i, "");
@@ -74,6 +74,52 @@
       return `<span class="exp-tag">${short}</span>`;
     }).join("");
 
+    // ── Skaria-branded header (replaces oneMedicare shared header) ──
+    const headerEl = document.querySelector('[data-site-header]');
+    if (headerEl) {
+      headerEl.innerHTML = `
+        <div class="container header-inner">
+          <a href="skaria.html" class="sk-brand" aria-label="Skaria Medical Center home">
+            <img src="assets/skaria-logo.png" alt="" class="sk-nav-logo" aria-hidden="true" />
+            Skaria <em>Medical Center</em>
+          </a>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="skariaMainNav" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+          <nav class="site-nav" id="skariaMainNav" aria-label="Primary">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#shop" class="nav-link">Shop</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#team" class="nav-link">Team</a>
+            <a href="#reviews" class="nav-link">Reviews</a>
+            <a href="#journal" class="nav-link">Journal</a>
+            <a href="#contact" class="nav-link">Contact</a>
+          </nav>
+          <div class="header-actions">
+            <a href="https://wa.me/${center.contact.whatsapp}" target="_blank" rel="noopener" class="btn btn-amber btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378L.436 23.033l1.653-6.033a9.886 9.886 0 0 1-1.322-4.94C.769 5.94 5.73.978 11.843.978c3.054 0 5.918 1.19 8.073 3.348A11.337 11.337 0 0 1 23.26 12.37c0 6.114-4.96 11.076-11.073 11.076"/><path d="M.001 11.63C0 13.634.523 15.594 1.513 17.316L0 23.998l6.844-1.793a11.1 11.1 0 0 0 5.306 1.352h.005c6.114 0 11.074-4.961 11.074-11.075A11.006 11.006 0 0 0 11.845.01C5.731.01.002 4.97.002 11.085z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      `;
+      const toggle = headerEl.querySelector('.nav-toggle');
+      const nav    = headerEl.querySelector('#skariaMainNav');
+      if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+          const open = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!open));
+          nav.classList.toggle('is-open', !open);
+        });
+        nav.querySelectorAll('.nav-link').forEach((link) => {
+          link.addEventListener('click', () => {
+            toggle.setAttribute('aria-expanded', 'false');
+            nav.classList.remove('is-open');
+          });
+        });
+      }
+    }
+
     const hero    = $("#skariaHero");
     const content = $("#skariaContent");
     if (!hero || !content) return;
@@ -81,15 +127,9 @@
     hero.innerHTML = `
       <div class="container profile-hero-inner skaria-hero-inner">
         <div class="skaria-hero-copy">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="centers.html">Centers</a>
-            <span aria-hidden="true">/</span>
-            <span>Skaria</span>
-          </nav>
           <div class="skaria-logo-wrap">
             <img src="assets/skaria-logo.png" alt="Skaria Medical" class="skaria-logo-img" />
           </div>
-          <p class="skaria-subbrand">oneMedicare &middot; CTR-001</p>
           <h1 class="skaria-title">Skaria<em>Medical Center</em></h1>
           <p class="skaria-tagline">${center.tagline}</p>
           ${expTags ? `<div class="exp-tags-row" aria-label="Areas of care">${expTags}</div>` : ""}
@@ -357,7 +397,6 @@
               <div class="skaria-contact-actions">
                 <a class="btn btn-primary" href="mailto:${center.contact.email}?subject=${encodeURIComponent('Skaria inquiry')}" target="_blank" rel="noopener">Email Skaria</a>
                 <a class="btn btn-whatsapp" href="https://wa.me/${center.contact.whatsapp}?text=${encodeURIComponent('Hi, I would like to inquire about Skaria Medical Center.')}" target="_blank" rel="noopener">&#128172; WhatsApp Us</a>
-                <a class="btn btn-ghost" href="centers.html">Back to directory</a>
               </div>
             </div>
           </div>
@@ -367,12 +406,65 @@
 
     initScrollSpy();
 
+    // ── Skaria-branded footer (replaces oneMedicare shared footer) ──
+    const footerEl = document.querySelector('[data-site-footer]');
+    if (footerEl) {
+      footerEl.innerHTML = `
+        <div class="container sk-footer-inner">
+          <div class="sk-footer-brand">
+            <img src="assets/skaria-logo.png" alt="Skaria Medical Center" class="sk-footer-logo" />
+            <p class="sk-footer-name">Skaria <em>Medical Center</em></p>
+            <p class="sk-footer-tagline">${center.tagline}</p>
+            <div class="sk-footer-socials">
+              <a href="https://wa.me/${center.contact.whatsapp}" target="_blank" rel="noopener" class="sk-footer-social" aria-label="WhatsApp">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378L.436 23.033l1.653-6.033a9.886 9.886 0 0 1-1.322-4.94C.769 5.94 5.73.978 11.843.978c3.054 0 5.918 1.19 8.073 3.348A11.337 11.337 0 0 1 23.26 12.37c0 6.114-4.96 11.076-11.073 11.076"/><path d="M.001 11.63C0 13.634.523 15.594 1.513 17.316L0 23.998l6.844-1.793a11.1 11.1 0 0 0 5.306 1.352h.005c6.114 0 11.074-4.961 11.074-11.075A11.006 11.006 0 0 0 11.845.01C5.731.01.002 4.97.002 11.085z"/></svg>
+              </a>
+              <a href="mailto:${center.contact.email}" class="sk-footer-social" aria-label="Email">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="sk-footer-col">
+            <h4>Navigate</h4>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#shop">Shop</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#team">Team</a></li>
+              <li><a href="#reviews">Reviews</a></li>
+              <li><a href="#journal">Journal</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="sk-footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:${center.contact.email}">${center.contact.email}</a></li>
+              <li><a href="https://wa.me/${center.contact.whatsapp}">+254 795 920 217 (WhatsApp)</a></li>
+              <li><a href="tel:${center.contact.phone.replace(/\D/g, '')}">${center.contact.phone}</a></li>
+              <li>${center.contact.address}</li>
+            </ul>
+          </div>
+          <div class="sk-footer-col">
+            <h4>Hours</h4>
+            <p>${center.contact.hours}</p>
+          </div>
+        </div>
+        <div class="sk-footer-bottom">
+          <div class="container">
+            <span>&copy; 2026 Skaria Medical Center. All rights reserved.</span>
+            <span>Telehealth &middot; Nairobi, Kenya</span>
+          </div>
+        </div>
+      `;
+    }
+
     // Share button
     const shareBtn = document.getElementById("skariaShareBtn");
     if (shareBtn) {
       shareBtn.addEventListener("click", async () => {
         const shareData = {
-          title: "Skaria Medical Center | oneMedicare",
+          title: "Skaria Medical Center",
           text: "Check out Skaria Medical Center — holistic telehealth blending African herbalism and Western clinical medicine.",
           url: window.location.href,
         };
