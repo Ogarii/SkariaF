@@ -82,7 +82,7 @@ const CENTERS = [
       email: "hello@skaria.care",
       phone: "+1 (323) 913-4688",
       whatsapp: "254795920217",
-      address: "412 Alder Street, Suite 300, Portland, OR 97204",
+      address: " ",
       hours: "Mon-Fri 8am-7pm · Sat 9am-2pm",
     },
     stats: { practitioners: 6, services: 10, yearsActive: 15 },
