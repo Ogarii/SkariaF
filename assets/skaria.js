@@ -5,6 +5,15 @@
 
   const { CATEGORIES, CENTERS, PRACTITIONERS, TESTIMONIALS } = window.OM_DATA || {};
 
+  const SERVICE_PLACEHOLDER_IMAGES = [
+    "assets/herbs/hibiscus.jpg",
+    "assets/herbs/guava.jpg",
+    "assets/herbs/chamomile.jpg",
+    "assets/herbs/cinnamon.jpg",
+    "assets/herbs/turmeric.jpg",
+    "assets/herbs/african-sausage-tree.jpg",
+  ];
+
   function catName(id) {
     return ((CATEGORIES || []).find((c) => c.id === id) || {}).name || id;
   }
@@ -33,17 +42,88 @@
     return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   }
 
+  function initScrollReveal() {
+    const items = $$(".reveal-up");
+    if (!items.length) return;
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+    items.forEach((el) => obs.observe(el));
+  }
+
+  function initFlagshipGallery() {
+    const gallery = $("[data-flagship-gallery]");
+    if (!gallery) return;
+    const slides = $$(".flagship-slide", gallery);
+    const dots   = $$(".flagship-dot", gallery);
+    if (slides.length < 2) return;
+    let index = 0;
+    let timer = null;
+
+    function show(i) {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, si) => s.classList.toggle("is-active", si === index));
+      dots.forEach((d, di) => d.classList.toggle("is-active", di === index));
+    }
+    function next() { show(index + 1); }
+    function prev() { show(index - 1); }
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(next, 3800);
+    }
+
+    const nextBtn = $("[data-flagship-next]", gallery);
+    const prevBtn = $("[data-flagship-prev]", gallery);
+    if (nextBtn) nextBtn.addEventListener("click", () => { next(); restart(); });
+    if (prevBtn) prevBtn.addEventListener("click", () => { prev(); restart(); });
+    dots.forEach((d) => d.addEventListener("click", () => { show(Number(d.dataset.flagshipDot)); restart(); }));
+    gallery.addEventListener("mouseenter", () => timer && clearInterval(timer));
+    gallery.addEventListener("mouseleave", restart);
+
+    restart();
+  }
+
+  function initServicePhotoCards() {
+    $$(".service-photo-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        if (window.matchMedia("(hover: hover)").matches) return;
+        if (!card.classList.contains("is-open")) {
+          e.preventDefault();
+          $$(".service-photo-card.is-open").forEach((c) => { if (c !== card) c.classList.remove("is-open"); });
+          card.classList.add("is-open");
+        }
+      });
+      card.addEventListener("focus", () => card.classList.add("is-open"));
+      card.addEventListener("blur", () => card.classList.remove("is-open"));
+    });
+  }
+
   function initScrollSpy() {
     if (!("IntersectionObserver" in window)) return;
     const tabs = $$(".skaria-tab");
     const secs = $$(".skaria-sec");
+    const tabsRail = $(".skaria-tabs");
     if (!tabs.length || !secs.length) return;
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         tabs.forEach((t) => t.classList.remove("is-active"));
         const match = tabs.find((t) => t.getAttribute("href") === "#" + e.target.id);
-        if (match) match.classList.add("is-active");
+        if (match) {
+          match.classList.add("is-active");
+          if (tabsRail) {
+            match.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+          }
+        }
       });
     }, { rootMargin: "-12% 0px -80% 0px", threshold: 0 });
     secs.forEach((s) => obs.observe(s));
@@ -54,6 +134,7 @@
     if (!center) return;
 
     const products = center.products || [];
+    const flagship = products.find((p) => p.flagship);
     const blogs    = center.blogs    || [];
     const pracs    = (PRACTITIONERS || []).filter((p) => p.centerSlug === "skaria");
     const reviews  = (TESTIMONIALS  || []).filter((t) => t.centerSlug === "skaria");
@@ -74,7 +155,7 @@
       return `<span class="exp-tag">${short}</span>`;
     }).join("");
 
-    // ── Skaria-branded header (replaces oneMedicare shared header) ──
+    // ── Skaria header ──
     const headerEl = document.querySelector('[data-site-header]');
     if (headerEl) {
       headerEl.innerHTML = `
@@ -87,18 +168,19 @@
             <span></span><span></span><span></span>
           </button>
           <nav class="site-nav" id="skariaMainNav" aria-label="Primary">
-            <a href="#overview" class="nav-link">Overview</a>
-            <a href="#shop" class="nav-link">Shop</a>
             <a href="#services" class="nav-link">Services</a>
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#why" class="nav-link">Why Skaria</a>
+            <a href="#shop" class="nav-link">Shop</a>
             <a href="#team" class="nav-link">Team</a>
             <a href="#reviews" class="nav-link">Reviews</a>
             <a href="#journal" class="nav-link">Journal</a>
             <a href="#contact" class="nav-link">Contact</a>
           </nav>
           <div class="header-actions">
-            <a href="https://wa.me/${center.contact.whatsapp}" target="_blank" rel="noopener" class="btn btn-amber btn-sm">
+            <a href="https://wa.me/${center.contact.whatsapp}" target="_blank" rel="noopener" class="btn btn-amber btn-sm" aria-label="Message Skaria on WhatsApp">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378L.436 23.033l1.653-6.033a9.886 9.886 0 0 1-1.322-4.94C.769 5.94 5.73.978 11.843.978c3.054 0 5.918 1.19 8.073 3.348A11.337 11.337 0 0 1 23.26 12.37c0 6.114-4.96 11.076-11.073 11.076"/><path d="M.001 11.63C0 13.634.523 15.594 1.513 17.316L0 23.998l6.844-1.793a11.1 11.1 0 0 0 5.306 1.352h.005c6.114 0 11.074-4.961 11.074-11.075A11.006 11.006 0 0 0 11.845.01C5.731.01.002 4.97.002 11.085z"/></svg>
-              WhatsApp
+              <span class="btn-label-long">WhatsApp</span>
             </a>
           </div>
         </div>
@@ -125,55 +207,41 @@
     if (!hero || !content) return;
 
     hero.innerHTML = `
-      <div class="container profile-hero-inner skaria-hero-inner">
-        <div class="skaria-hero-copy">
-          <div class="skaria-logo-wrap">
-            <img src="assets/skaria-logo.png" alt="Skaria Medical" class="skaria-logo-img" />
-          </div>
-          <h1 class="skaria-title">Skaria<em>Medical Center</em></h1>
-          <p class="skaria-tagline">${center.tagline}</p>
-          ${expTags ? `<div class="exp-tags-row" aria-label="Areas of care">${expTags}</div>` : ""}
-          ${pills(center.categories)}
-          <div class="profile-hero-actions">
-            <a class="btn btn-amber" href="#shop">Browse shop</a>
-            <a class="btn btn-outline-light" href="#services">View services</a>
-            <a class="btn btn-outline-light" href="#contact">Contact us</a>
-            <button class="btn btn-outline-light skaria-share-btn" id="skariaShareBtn" aria-label="Share this page">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              Share
-            </button>
-          </div>
+      <div class="container skaria-hero-centered">
+        <div class="skaria-logo-wrap">
+          <img src="assets/skaria-logo.png" alt="Skaria Medical" class="skaria-logo-img" />
         </div>
+        <h1 class="skaria-title">Skaria<em>Medical Center</em></h1>
+        <p class="skaria-tagline">${center.tagline}</p>
+        ${expTags ? `<div class="exp-tags-row" aria-label="Areas of care">${expTags}</div>` : ""}
+        ${pills(center.categories)}
+        <div class="profile-hero-actions">
+          <a class="btn btn-amber" href="#contact">Book a consultation</a>
+          <a class="btn btn-outline-light" href="#services">Explore services</a>
+          <button class="btn btn-outline-light skaria-share-btn" id="skariaShareBtn" aria-label="Share this page">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+        </div>
+      </div>
 
-        <aside class="profile-stats-card" aria-label="Skaria at a glance">
-          <div class="rating-line">
-            <span class="star" aria-hidden="true">${stars(center.rating)}</span>
-            <span>${center.rating}</span>
-          </div>
-          <p class="rating-count">${center.reviewCount} patient reviews</p>
-          <div class="stat-row">
-            <div><span class="num">${center.stats.practitioners}</span><span class="label">Practitioners</span></div>
-            <div><span class="num">${center.stats.services}</span><span class="label">Services</span></div>
-            <div><span class="num">${center.stats.yearsActive}+</span><span class="label">Years</span></div>
-          </div>
-          ${visionText ? `
-          <div class="stats-vision-block">
-            <p class="stats-vision-eye">Vision</p>
-            <p class="stats-vision-body">${visionText}</p>
-          </div>` : ""}
-          <dl class="contact-list" style="margin-top:var(--space-5)">
-            <div><dt>WhatsApp</dt><dd><a href="https://wa.me/${center.contact.whatsapp}">+254 795 920 217</a></dd></div>
-            <div><dt>US (Google Voice)</dt><dd><a href="tel:${center.contact.phone.replace(/\D/g, '')}">${center.contact.phone}</a></dd></div>
-            <div><dt>Hours</dt><dd>${center.contact.hours}</dd></div>
-          </dl>
-        </aside>
+      <div class="container skaria-hero-stats-strip" aria-label="Skaria at a glance">
+        <div class="hero-stat">
+          <span class="star" aria-hidden="true">${stars(center.rating)}</span>
+          <span class="hero-stat-num">${center.rating}</span>
+          <span class="hero-stat-label">${center.reviewCount} reviews</span>
+        </div>
+        <div class="hero-stat"><span class="hero-stat-num">${center.stats.practitioners}</span><span class="hero-stat-label">Practitioners</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">${center.stats.services}</span><span class="hero-stat-label">Services</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">${center.stats.yearsActive}+</span><span class="hero-stat-label">Years active</span></div>
       </div>
     `;
 
     const NAV = [
-      { id: "overview", label: "Overview" },
-      { id: "shop",     label: "Shop"     },
       { id: "services", label: "Services" },
+      { id: "overview", label: "Overview" },
+      { id: "why",      label: "Why Skaria" },
+      { id: "shop",     label: "Shop"     },
       { id: "team",     label: "Team"     },
       { id: "reviews",  label: "Reviews"  },
       { id: "journal",  label: "Journal"  },
@@ -193,54 +261,122 @@
         </div>
       </nav>
 
+      <!-- SERVICES -->
+      <section class="section skaria-sec" id="services">
+        <div class="container">
+          ${sectionHead("Programs", "Services &amp; consults", "Integrative sessions for nutrition, movement, and supportive botanicals designed to fit your life. Hover a card for details.")}
+          <div class="service-photo-grid">${center.services.map((s, i) => `
+            <article class="service-photo-card reveal-up" tabindex="0" style="background-image:url('${SERVICE_PLACEHOLDER_IMAGES[i % SERVICE_PLACEHOLDER_IMAGES.length]}');transition-delay:${Math.min(i, 6) * 0.06}s">
+              <div class="service-photo-title">${s.name}</div>
+              <div class="service-photo-hover">
+                <div class="service-photo-badges">
+                  <span class="emvi-badge">${s.duration}</span>
+                  <span class="emvi-badge">${s.price}</span>
+                </div>
+                <p class="service-photo-desc">${s.description}</p>
+                <div class="service-photo-actions">
+                  <a class="btn-photo btn-photo--ghost" href="#contact">Learn more</a>
+                  <a class="btn-photo btn-photo--solid" href="#contact">Book now</a>
+                </div>
+              </div>
+            </article>`).join("")}
+          </div>
+        </div>
+      </section>
+
       <!-- OVERVIEW -->
       <section class="section skaria-sec" id="overview">
         <div class="container">
           ${sectionHead("About us", "Skaria Medical Center", "")}
-          <div class="vm-grid">
-            <article class="vm-card vm-card--mission">
-              <p class="vm-label">Mission</p>
-              <p class="vm-body">${missionText}</p>
-            </article>
-            ${visionText ? `
-            <article class="vm-card vm-card--vision">
-              <p class="vm-label">Vision</p>
-              <p class="vm-body">${visionText}</p>
-            </article>` : ""}
+          <div class="skaria-about-grid">
+            <div class="skaria-about-text reveal-up">
+              <div class="vm-grid">
+                <article class="vm-card vm-card--mission">
+                  <p class="vm-label">Mission</p>
+                  <p class="vm-body">${missionText}</p>
+                </article>
+                ${visionText ? `
+                <article class="vm-card vm-card--vision">
+                  <p class="vm-label">Vision</p>
+                  <p class="vm-body">${visionText}</p>
+                </article>` : ""}
+              </div>
+              <div class="about-kpis">
+                <div class="about-kpi-card">
+                  <span class="about-kpi-label">Practitioners</span>
+                  <span class="about-kpi-value">${center.stats.practitioners}</span>
+                </div>
+                <div class="about-kpi-card">
+                  <span class="about-kpi-label">Services</span>
+                  <span class="about-kpi-value">${center.stats.services}</span>
+                </div>
+                <div class="about-kpi-card">
+                  <span class="about-kpi-label">Products</span>
+                  <span class="about-kpi-value">${products.length || "—"}</span>
+                </div>
+                <div class="about-kpi-card">
+                  <span class="about-kpi-label">Years active</span>
+                  <span class="about-kpi-value">${center.stats.yearsActive}+</span>
+                </div>
+              </div>
+              ${integratesText ? `<div class="integrates-strip"><p>${integratesText}</p></div>` : ""}
+              <div class="profile-hero-actions">
+                <a class="btn btn-amber" href="#services">Explore services</a>
+                <a class="btn btn-outline-light" href="#contact">Book a consult</a>
+              </div>
+            </div>
+            <div class="skaria-about-media reveal-up">
+              <div class="skaria-about-photo-wrap${pracs[0] && pracs[0].photo ? '' : ' sk-marble-bg'}">
+                ${pracs[0] && pracs[0].photo
+                  ? `<img src="${pracs[0].photo}" alt="${pracs[0].firstName} ${pracs[0].lastName}" class="skaria-about-photo" />`
+                  : `<img src="assets/skaria-logo.png" alt="Skaria Medical" class="skaria-about-logo" />`
+                }
+              </div>
+              ${founderText ? `
+              <div class="founder-strip">
+                <div>
+                  <span class="founder-label">Founder</span>
+                  <p class="founder-body">${founderText}</p>
+                </div>
+              </div>` : ''}
+            </div>
           </div>
-          <div class="about-kpis">
-            <div class="about-kpi-card">
-              <span class="about-kpi-label">Practitioners</span>
-              <span class="about-kpi-value">${center.stats.practitioners}</span>
+        </div>
+      </section>
+
+      <!-- WHY SKARIA -->
+      <section class="section band-paper-deep skaria-sec" id="why">
+        <div class="container">
+          ${sectionHead("Why Skaria", "What sets us apart", "")}
+          <div class="why-grid">
+            <div class="why-cards">
+              <article class="why-card reveal-up">
+                <h3>Certified practitioners</h3>
+                <p>${center.stats.practitioners} specialists blending African herbalism and Western clinical medicine, active for ${center.stats.yearsActive}+ years.</p>
+              </article>
+              ${specialtyText ? `
+              <article class="why-card reveal-up" style="transition-delay:0.08s">
+                <h3>Tailored care plans</h3>
+                <p>Specialties include ${specialtyText}</p>
+              </article>` : ""}
+              <article class="why-card reveal-up" style="transition-delay:0.16s">
+                <h3>Telehealth access</h3>
+                <p>Appointments ${center.contact.hours}, reachable by WhatsApp, phone, or video from anywhere.</p>
+              </article>
             </div>
-            <div class="about-kpi-card">
-              <span class="about-kpi-label">Services</span>
-              <span class="about-kpi-value">${center.stats.services}</span>
-            </div>
-            <div class="about-kpi-card">
-              <span class="about-kpi-label">Products</span>
-              <span class="about-kpi-value">${products.length || "—"}</span>
-            </div>
-            <div class="about-kpi-card">
-              <span class="about-kpi-label">Years active</span>
-              <span class="about-kpi-value">${center.stats.yearsActive}+</span>
+            <div class="why-media reveal-up">
+              <div class="why-media-collage">
+                <img src="assets/herbs/turmeric.jpg" alt="Turmeric" class="why-media-tile why-media-tile--a" loading="lazy" />
+                <img src="assets/herbs/aloe-vera.jpg" alt="Aloe vera" class="why-media-tile why-media-tile--b" loading="lazy" />
+                <img src="assets/herbs/honey.jpg" alt="Raw honey" class="why-media-tile why-media-tile--c" loading="lazy" />
+                <img src="assets/skaria-logo.png" alt="Skaria Medical" class="why-media-logo" />
+              </div>
             </div>
           </div>
-          ${founderText ? `
-          <div class="founder-strip">
-            ${pracs[0] && pracs[0].photo ? `<img src="${pracs[0].photo}" alt="${pracs[0].firstName} ${pracs[0].lastName}" class="founder-photo" />` : ''}
-            <div>
-              <span class="founder-label">Founder</span>
-              <p class="founder-body">${founderText}</p>
-            </div>
-          </div>` : ''}
-          ${specialtyText ? `
-          <div class="specialties-strip">
-            <p class="specialties-label">Specialties include</p>
-            <p class="specialties-body">${specialtyText}</p>
-          </div>` : ""}
-          ${integratesText ? `
-          <div class="integrates-strip"><p>${integratesText}</p></div>` : ""}
+          <div class="profile-hero-actions">
+            <a class="btn btn-amber" href="#team">Meet the team</a>
+            <a class="btn btn-outline-light" href="#contact">Book now</a>
+          </div>
         </div>
       </section>
 
@@ -249,9 +385,48 @@
         <div class="skaria-shop-inner">
           <div class="container">
             ${sectionHead("Shop", "Our products", "Traditional herbal blends, wellness supports, and clinical-grade protocols from Skaria&rsquo;s catalog.")}
+            ${flagship ? `
+            <article class="flagship-card reveal-up" aria-label="Flagship product: ${flagship.name}">
+              <div class="flagship-gallery" data-flagship-gallery>
+                ${(flagship.gallery || [flagship.image]).map((src, gi) => `
+                  <img src="${src}" alt="${flagship.name} photo ${gi + 1}" class="flagship-slide${gi === 0 ? ' is-active' : ''}" loading="${gi === 0 ? 'eager' : 'lazy'}" />
+                `).join("")}
+                ${(flagship.gallery || []).length > 1 ? `
+                <button type="button" class="flagship-arrow flagship-arrow--prev" data-flagship-prev aria-label="Previous photo">&lsaquo;</button>
+                <button type="button" class="flagship-arrow flagship-arrow--next" data-flagship-next aria-label="Next photo">&rsaquo;</button>
+                <div class="flagship-dots" data-flagship-dots>
+                  ${(flagship.gallery || []).map((_, gi) => `<button type="button" class="flagship-dot${gi === 0 ? ' is-active' : ''}" data-flagship-dot="${gi}" aria-label="Show photo ${gi + 1}"></button>`).join("")}
+                </div>` : ""}
+              </div>
+              <div class="flagship-body">
+                <span class="flagship-badge">Flagship product</span>
+                <h3 class="flagship-title">${flagship.name}</h3>
+                <p class="flagship-desc">${flagship.description}</p>
+                <div class="emvi-p-tags"><span class="emvi-tag">${flagship.category}</span></div>
+                <div class="flagship-benefits">
+                  <div class="flagship-benefit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Live probiotic cultures that support daily digestion
+                  </div>
+                  <div class="flagship-benefit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Easier to digest thanks to its A2 casein profile
+                  </div>
+                  <div class="flagship-benefit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Fermented in small batches at Skaria
+                  </div>
+                </div>
+                <p class="flagship-note"><strong>How to enjoy:</strong> chilled on its own, or blended into smoothies and porridge.</p>
+                <div class="flagship-actions">
+                  <a class="btn btn-amber" href="https://wa.me/${center.contact.whatsapp}?text=${encodeURIComponent('Hi, I am interested in ' + flagship.name)}" target="_blank" rel="noopener">Order on WhatsApp</a>
+                  <a class="btn btn-outline-light" href="#contact">Ask a question</a>
+                </div>
+              </div>
+            </article>` : ""}
             ${products.length
-              ? `<div class="emvi-shop-grid">${products.map((p) => `
-                <article class="emvi-product-card">
+              ? `<div class="emvi-shop-grid">${products.filter((p) => !p.flagship).map((p, i) => `
+                <article class="emvi-product-card reveal-up" style="transition-delay:${Math.min(i, 6) * 0.06}s">
                   <div class="emvi-p-image${p.image ? '' : ' sk-marble-bg'}">
                     ${p.image ? `<img src="${p.image}" alt="${p.name}" class="emvi-p-img" loading="lazy" />` : ''}
                     <div class="emvi-p-actions">
@@ -281,42 +456,14 @@
         </div>
       </section>
 
-      <!-- SERVICES -->
-      <section class="section skaria-sec" id="services">
-        <div class="container">
-          ${sectionHead("Programs", "Services &amp; consults", "Integrative sessions for nutrition, movement, and supportive botanicals &mdash; designed to fit your life.")}
-          <div class="emvi-services-grid">${center.services.map((s, i) => `
-            <article class="emvi-h-card">
-              <div class="emvi-h-image sk-marble-bg">
-                <span class="emvi-h-num">${String(i + 1).padStart(2, '0')}</span>
-              </div>
-              <div class="emvi-h-body">
-                <div class="emvi-h-badges">
-                  <span class="emvi-badge">${s.duration}</span>
-                  <span class="emvi-badge">${s.price}</span>
-                </div>
-                <div class="emvi-h-title">${s.name}</div>
-                <div class="emvi-h-desc">${s.description}</div>
-                <div class="emvi-h-actions">
-                  <a class="emvi-cta-btn" href="#contact">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    Book consultation
-                  </a>
-                </div>
-              </div>
-            </article>`).join("")}
-          </div>
-        </div>
-      </section>
-
       <!-- TEAM -->
       <section class="section band-paper-deep skaria-sec" id="team">
         <div class="container">
           ${sectionHead("Team", "Practitioners", "")}
           <div class="team-grid">${
             pracs.length
-              ? pracs.map((p) => `
-                <article class="team-card">
+              ? pracs.map((p, i) => `
+                <article class="team-card reveal-up" style="transition-delay:${Math.min(i, 6) * 0.08}s">
                   ${p.photo
                     ? `<img src="${p.photo}" alt="${p.firstName} ${p.lastName}" class="team-photo" />`
                     : `<div class="team-avatar" aria-hidden="true">${p.firstName[0]}${p.lastName[0]}</div>`
@@ -341,8 +488,8 @@
           ${sectionHead("Testimonials", "Patient voices", "")}
           <div class="profile-testimonials">${
             reviews.length
-              ? reviews.map((t) => `
-                <article class="testimonial-card">
+              ? reviews.map((t, i) => `
+                <article class="testimonial-card reveal-up" style="transition-delay:${Math.min(i, 6) * 0.08}s">
                   <span class="quote-mark" aria-hidden="true">&ldquo;</span>
                   <blockquote>${t.quote}</blockquote>
                   <footer>
@@ -360,8 +507,8 @@
         <div class="container">
           ${sectionHead("Journal", "Blog", "")}
           ${blogs.length
-            ? `<div class="emvi-blog-grid">${blogs.map((b) => `
-              <article class="emvi-blog-card">
+            ? `<div class="emvi-blog-grid">${blogs.map((b, i) => `
+              <article class="emvi-blog-card reveal-up"${b.image ? ` style="background-image:url('${b.image}');transition-delay:${Math.min(i, 6) * 0.08}s"` : ` style="transition-delay:${Math.min(i, 6) * 0.08}s"`}>
                 <div class="emvi-blog-content">
                   <div class="emvi-blog-label">${b.readMin} min read &middot; ${b.author.split(',')[0]}</div>
                   <h3 class="emvi-blog-title">${b.title}</h3>
@@ -405,8 +552,12 @@
     `;
 
     initScrollSpy();
+    initScrollReveal();
+    initFlagshipGallery();
+    initServicePhotoCards();
+    requestAnimationFrame(() => hero.classList.add("is-visible"));
 
-    // ── Skaria-branded footer (replaces oneMedicare shared footer) ──
+    // ── Skaria footer ──
     const footerEl = document.querySelector('[data-site-footer]');
     if (footerEl) {
       footerEl.innerHTML = `
@@ -427,9 +578,10 @@
           <div class="sk-footer-col">
             <h4>Navigate</h4>
             <ul>
-              <li><a href="#overview">Overview</a></li>
-              <li><a href="#shop">Shop</a></li>
               <li><a href="#services">Services</a></li>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#why">Why Skaria</a></li>
+              <li><a href="#shop">Shop</a></li>
               <li><a href="#team">Team</a></li>
               <li><a href="#reviews">Reviews</a></li>
               <li><a href="#journal">Journal</a></li>

@@ -12,53 +12,115 @@
   --sk-teal-deep:      #22B0A3;
   --sk-teal-glow:      rgba(46, 207, 192, 0.22);
   --sk-teal-faint:     rgba(46, 207, 192, 0.12);
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Lean white bands everywhere instead of the tinted paper background */
+#centerProfile[data-center-slug="skaria"] .band-paper-deep {
+  background: #fbfdfd;
 }
 
 /* ─────────────────────────────────────────────────────────────────
    HERO BACKGROUND
    ───────────────────────────────────────────────────────────────── */
 #centerProfile[data-center-slug="skaria"] .profile-hero {
-  background-image: linear-gradient(135deg, #e8f4f5 0%, #d0eaec 45%, #c5e4e6 100%);
+  background: #ffffff;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .profile-hero.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-/* Ambient glows */
+/* Faint ambient wash — kept minimal so the background stays lean and white */
 #centerProfile[data-center-slug="skaria"] .profile-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 110% at 90% 25%, rgba(49, 151, 149, 0.15) 0%, transparent 58%),
-    radial-gradient(ellipse 55% 70% at 5%  80%, rgba(20, 180, 185, 0.12)  0%, transparent 54%),
-    radial-gradient(ellipse 40% 50% at 50% 115%, rgba(44, 122, 123, 0.10) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Dot grid */
-#centerProfile[data-center-slug="skaria"] .profile-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(49, 151, 149, 0.08) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(46, 207, 192, 0.06) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   HERO INNER GRID
+   HERO — centered, single-column (TCM-style banner)
    ───────────────────────────────────────────────────────────────── */
-#centerProfile[data-center-slug="skaria"] .profile-hero-inner {
+#centerProfile[data-center-slug="skaria"] .skaria-hero-centered {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: var(--space-8);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
   padding-top: var(--space-9);
-  padding-bottom: var(--space-9);
+  padding-bottom: var(--space-6);
+}
+#centerProfile[data-center-slug="skaria"] .skaria-hero-centered .exp-tags-row,
+#centerProfile[data-center-slug="skaria"] .skaria-hero-centered .pill-row,
+#centerProfile[data-center-slug="skaria"] .skaria-hero-centered .profile-hero-actions {
+  justify-content: center;
+}
+#centerProfile[data-center-slug="skaria"] .skaria-hero-centered .skaria-tagline {
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Stats strip — horizontal band below the hero copy */
+#centerProfile[data-center-slug="skaria"] .skaria-hero-stats-strip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-8);
+  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid rgba(49, 151, 149, 0.18);
+  border-radius: 22px;
+  padding: var(--space-6) var(--space-8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 48px rgba(49, 151, 149, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  margin-inline: auto;
+  margin-bottom: calc(-1 * var(--space-9));
+  transform: translateY(50%);
+  max-width: 880px;
+}
+#centerProfile[data-center-slug="skaria"] .hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 90px;
+}
+#centerProfile[data-center-slug="skaria"] .hero-stat .star {
+  color: var(--color-amber);
+  font-size: 1rem;
+}
+#centerProfile[data-center-slug="skaria"] .hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+  color: #0f3040;
+}
+#centerProfile[data-center-slug="skaria"] .hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(20, 70, 80, 0.55);
+}
+
+/* Extra breathing room so content below clears the overlapping strip */
+#centerProfile[data-center-slug="skaria"] .skaria-in-page-nav {
+  margin-top: var(--space-8);
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -113,15 +175,20 @@
   line-height: 1.68;
 }
 
-/* Skaria logo in hero */
+/* Skaria logo in hero — the one thing that should pop off the white page */
 #centerProfile[data-center-slug="skaria"] .skaria-logo-wrap {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  display: inline-flex;
+  padding: var(--space-4);
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 20px 48px -12px rgba(46, 207, 192, 0.38), 0 4px 16px rgba(15, 48, 64, 0.08);
 }
 #centerProfile[data-center-slug="skaria"] .skaria-logo-img {
-  width: 140px;
-  height: 140px;
+  width: 168px;
+  height: 168px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 18px;
   border: none;
   background: transparent;
   backdrop-filter: none;
@@ -432,6 +499,39 @@
   color: var(--color-ink);
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   OVERVIEW — two-column about grid (text left / photo right)
+   ───────────────────────────────────────────────────────────────── */
+#centerProfile[data-center-slug="skaria"] .skaria-about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+#centerProfile[data-center-slug="skaria"] .skaria-about-text .vm-grid {
+  margin-bottom: var(--space-6);
+}
+#centerProfile[data-center-slug="skaria"] .skaria-about-photo-wrap {
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 16px 48px -10px rgba(22, 32, 26, 0.22);
+}
+#centerProfile[data-center-slug="skaria"] .skaria-about-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+#centerProfile[data-center-slug="skaria"] .skaria-about-logo {
+  width: 45%;
+  height: 45%;
+  object-fit: contain;
+  margin: auto;
+  display: block;
+}
+
 /* Founder strip */
 #centerProfile[data-center-slug="skaria"] .founder-strip {
   display: flex;
@@ -441,7 +541,7 @@
   border-left: 4px solid var(--color-amber);
   border-radius: 0 18px 18px 0;
   padding: var(--space-5) var(--space-6);
-  margin-bottom: var(--space-5);
+  margin-top: var(--space-5);
   box-shadow: 0 2px 8px rgba(22, 32, 26, 0.05), 0 10px 28px -10px rgba(22, 32, 26, 0.1);
 }
 #centerProfile[data-center-slug="skaria"] .founder-photo {
@@ -484,27 +584,6 @@
   background: rgba(46, 207, 192, 0.08);
 }
 
-/* Specialties strip */
-#centerProfile[data-center-slug="skaria"] .specialties-strip {
-  background: var(--color-paper-deep);
-  border-radius: 16px;
-  padding: var(--space-5) var(--space-6);
-  margin-bottom: var(--space-5);
-}
-#centerProfile[data-center-slug="skaria"] .specialties-label {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-ink-faint);
-  margin-bottom: var(--space-2);
-}
-#centerProfile[data-center-slug="skaria"] .specialties-body {
-  font-size: 0.9rem;
-  color: var(--color-ink-soft);
-  line-height: 1.68;
-}
-
 /* Integrates note */
 #centerProfile[data-center-slug="skaria"] .integrates-strip {
   margin-top: var(--space-3);
@@ -516,6 +595,111 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────
+   WHY SKARIA — 3 differentiator cards + image
+   ───────────────────────────────────────────────────────────────── */
+#centerProfile[data-center-slug="skaria"] .why-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: var(--space-8);
+  align-items: center;
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-7);
+}
+#centerProfile[data-center-slug="skaria"] .why-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+#centerProfile[data-center-slug="skaria"] .why-card {
+  background: #fff;
+  border-left: 4px solid var(--sk-teal);
+  border-radius: 0 18px 18px 0;
+  padding: var(--space-5) var(--space-6);
+  box-shadow: 0 2px 8px rgba(22, 32, 26, 0.05), 0 10px 28px -10px rgba(22, 32, 26, 0.1);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), opacity 0.6s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .why-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 14px rgba(22, 32, 26, 0.08), 0 20px 50px -12px rgba(22, 32, 26, 0.18);
+}
+#centerProfile[data-center-slug="skaria"] .why-card h3 {
+  font-size: 1.02rem;
+  color: #0f3040;
+  margin-bottom: var(--space-2);
+}
+#centerProfile[data-center-slug="skaria"] .why-card p {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  line-height: 1.62;
+}
+#centerProfile[data-center-slug="skaria"] .why-media-collage {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+#centerProfile[data-center-slug="skaria"] .why-media-tile {
+  position: absolute;
+  border-radius: 18px;
+  border: 4px solid #fff;
+  object-fit: cover;
+  box-shadow: 0 14px 34px -10px rgba(22, 32, 26, 0.30);
+}
+#centerProfile[data-center-slug="skaria"] .why-media-tile--a {
+  top: 0;
+  left: 6%;
+  width: 62%;
+  height: 54%;
+  z-index: 2;
+}
+#centerProfile[data-center-slug="skaria"] .why-media-tile--b {
+  bottom: 4%;
+  left: 0;
+  width: 46%;
+  height: 40%;
+  z-index: 1;
+}
+#centerProfile[data-center-slug="skaria"] .why-media-tile--c {
+  bottom: 0;
+  right: 2%;
+  width: 48%;
+  height: 44%;
+  z-index: 3;
+}
+#centerProfile[data-center-slug="skaria"] .why-media-logo {
+  position: absolute;
+  top: 6%;
+  right: 2%;
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 10px 22px -4px rgba(46, 207, 192, 0.42);
+  z-index: 4;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SCROLL-REVEAL — fade/rise-in as sections enter the viewport
+   ───────────────────────────────────────────────────────────────── */
+#centerProfile[data-center-slug="skaria"] .reveal-up {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .reveal-up.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #centerProfile[data-center-slug="skaria"] .reveal-up,
+  #centerProfile[data-center-slug="skaria"] .profile-hero {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
    SHOP — Dark band matching the hero
    ───────────────────────────────────────────────────────────────── */
 #centerProfile[data-center-slug="skaria"] .skaria-shop {
@@ -524,31 +708,17 @@
 }
 
 #centerProfile[data-center-slug="skaria"] .skaria-shop-inner {
-  background-image: linear-gradient(160deg, #edfaf8 0%, #dff5f3 45%, #d6f2ef 100%);
+  background: #ffffff;
   position: relative;
   padding-block: var(--space-9);
 }
 
-/* Ambient glow overlay */
+/* Faint ambient wash — kept minimal so the background stays lean and white */
 #centerProfile[data-center-slug="skaria"] .skaria-shop-inner::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 70% 90% at 92% 20%,  rgba(46, 207, 192, 0.14) 0%, transparent 56%),
-    radial-gradient(ellipse 55% 65% at 4%  78%,  rgba(46, 207, 192, 0.10) 0%, transparent 52%),
-    radial-gradient(ellipse 45% 55% at 52% 108%, rgba(46, 207, 192, 0.08) 0%, transparent 48%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Dot grid overlay */
-#centerProfile[data-center-slug="skaria"] .skaria-shop-inner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(46, 207, 192, 0.10) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: radial-gradient(ellipse 60% 70% at 50% 100%, rgba(46, 207, 192, 0.05) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
 }
@@ -781,7 +951,7 @@
   border-radius: 20px;
   padding: var(--space-6);
   box-shadow: 0 2px 8px rgba(22, 32, 26, 0.05), 0 12px 36px -10px rgba(22, 32, 26, 0.12);
-  transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), opacity 0.6s var(--ease);
   position: relative;
   overflow: hidden;
 }
@@ -1066,11 +1236,14 @@
   box-shadow:
     0 10px 36px rgba(0, 0, 0, 0.28),
     0 2px 8px rgba(0, 0, 0, 0.16);
-  background:
+  background-image:
     radial-gradient(ellipse 50% 75% at 68% 50%, rgba(49, 151, 149, 0.32) 0%, transparent 55%),
     radial-gradient(ellipse 30% 35% at 75% 32%, rgba(100, 200, 195, 0.28) 0%, transparent 42%),
     radial-gradient(ellipse 40% 25% at 55% 68%, rgba(20, 90, 90, 0.20) 0%, transparent 38%),
     linear-gradient(162deg, #07131a 0%, #0e2230 22%, #132b35 45%, #0a1f28 72%, #040e16 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   cursor: pointer;
   transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
 }
@@ -1160,87 +1333,293 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   EMVI CARD 2 — Horizontal Service Card
+   SERVICES — full-bleed photo cards, hover to reveal details
    ───────────────────────────────────────────────────────────────── */
-#centerProfile[data-center-slug="skaria"] .emvi-services-grid {
+#centerProfile[data-center-slug="skaria"] .service-photo-grid {
   display: flex;
-  flex-direction: column;
   gap: var(--space-4);
+  align-items: stretch;
   margin-top: var(--space-7);
 }
 
-#centerProfile[data-center-slug="skaria"] .emvi-h-card {
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.09);
-  display: flex;
+#centerProfile[data-center-slug="skaria"] .service-photo-card {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 460px;
+  border-radius: 18px;
   overflow: hidden;
-  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 8px 24px -8px rgba(15, 48, 64, 0.22);
+  transition: flex-grow 0.4s var(--ease), box-shadow 0.3s var(--ease), opacity 0.6s var(--ease), transform 0.6s var(--ease);
 }
-#centerProfile[data-center-slug="skaria"] .emvi-h-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+#centerProfile[data-center-slug="skaria"] .service-photo-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 20, 26, 0.85) 0%, rgba(6, 20, 26, 0.32) 40%, rgba(6, 20, 26, 0) 65%);
+  transition: background 0.35s var(--ease);
+  z-index: 1;
+}
+#centerProfile[data-center-slug="skaria"] .service-photo-card:hover,
+#centerProfile[data-center-slug="skaria"] .service-photo-card:focus-visible,
+#centerProfile[data-center-slug="skaria"] .service-photo-card.is-open {
+  flex-grow: 1.7;
+  box-shadow: 0 22px 52px -12px rgba(15, 48, 64, 0.36);
+}
+#centerProfile[data-center-slug="skaria"] .service-photo-card:hover::before,
+#centerProfile[data-center-slug="skaria"] .service-photo-card:focus-visible::before,
+#centerProfile[data-center-slug="skaria"] .service-photo-card.is-open::before {
+  background: linear-gradient(180deg, rgba(6, 20, 26, 0.50) 0%, rgba(6, 20, 26, 0.74) 55%, rgba(6, 20, 26, 0.92) 100%);
 }
 
-#centerProfile[data-center-slug="skaria"] .emvi-h-image {
-  width: 130px;
-  min-height: 140px;
-  flex-shrink: 0;
+#centerProfile[data-center-slug="skaria"] .service-photo-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-4);
+  padding: 0 var(--space-4);
+  z-index: 2;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .service-photo-card:hover .service-photo-title,
+#centerProfile[data-center-slug="skaria"] .service-photo-card:focus-visible .service-photo-title,
+#centerProfile[data-center-slug="skaria"] .service-photo-card.is-open .service-photo-title {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+#centerProfile[data-center-slug="skaria"] .service-photo-hover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-5);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  pointer-events: none;
+}
+#centerProfile[data-center-slug="skaria"] .service-photo-card:hover .service-photo-hover,
+#centerProfile[data-center-slug="skaria"] .service-photo-card:focus-visible .service-photo-hover,
+#centerProfile[data-center-slug="skaria"] .service-photo-card.is-open .service-photo-hover {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+#centerProfile[data-center-slug="skaria"] .service-photo-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+#centerProfile[data-center-slug="skaria"] .service-photo-badges .emvi-badge {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+#centerProfile[data-center-slug="skaria"] .service-photo-desc {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.86rem;
+  line-height: 1.56;
+  margin-bottom: var(--space-4);
+}
+
+#centerProfile[data-center-slug="skaria"] .service-photo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#centerProfile[data-center-slug="skaria"] .btn-photo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62em 1.1em;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .btn-photo--ghost {
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
+  background: transparent;
+}
+#centerProfile[data-center-slug="skaria"] .btn-photo--ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+#centerProfile[data-center-slug="skaria"] .btn-photo--solid {
+  background: #fff;
+  color: #0f3040;
+}
+#centerProfile[data-center-slug="skaria"] .btn-photo--solid:hover {
+  background: var(--sk-teal);
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FLAGSHIP PRODUCT — pronounced spotlight card with a photo scroller
+   ───────────────────────────────────────────────────────────────── */
+#centerProfile[data-center-slug="skaria"] .flagship-card {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: #fff;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px -16px rgba(15, 48, 64, 0.28), 0 0 0 1px rgba(46, 207, 192, 0.20);
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-8);
+}
+#centerProfile[data-center-slug="skaria"] .flagship-gallery {
+  position: relative;
+  aspect-ratio: 4 / 5.6;
+  overflow: hidden;
+  background: #0a1f28;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 0.9s var(--ease), transform 6s linear;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-slide.is-active {
+  opacity: 1;
+  transform: scale(1.0);
+  z-index: 1;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f3040;
+  font-size: 1.3rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.15s, transform 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-arrow:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+#centerProfile[data-center-slug="skaria"] .flagship-arrow--prev { left: 14px; }
+#centerProfile[data-center-slug="skaria"] .flagship-arrow--next { right: 14px; }
+#centerProfile[data-center-slug="skaria"] .flagship-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-dot.is-active {
+  background: var(--sk-teal);
+  transform: scale(1.25);
+}
+#centerProfile[data-center-slug="skaria"] .flagship-body {
+  padding: var(--space-8) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  justify-content: center;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-benefits {
+  display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  margin: var(--space-2) 0;
 }
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-num {
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.88);
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
-#centerProfile[data-center-slug="skaria"] .emvi-h-icon {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-body {
-  flex: 1;
-  padding: 18px 22px 18px 20px;
+#centerProfile[data-center-slug="skaria"] .flagship-benefit {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: 0.92rem;
+  color: var(--color-ink-soft);
+  line-height: 1.5;
 }
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-badges {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
-  line-height: 1.28;
-}
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-info {
-  font-size: 13px;
-  font-weight: 600;
+#centerProfile[data-center-slug="skaria"] .flagship-benefit svg {
+  flex-shrink: 0;
+  margin-top: 2px;
   color: var(--sk-teal);
 }
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-desc {
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.54;
-  flex: 1;
+#centerProfile[data-center-slug="skaria"] .flagship-note {
+  background: rgba(46, 207, 192, 0.08);
+  border: 1px solid rgba(46, 207, 192, 0.22);
+  border-radius: 14px;
+  padding: var(--space-4) var(--space-5);
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
 }
-
-#centerProfile[data-center-slug="skaria"] .emvi-h-actions {
-  margin-top: 4px;
+#centerProfile[data-center-slug="skaria"] .flagship-note strong {
+  color: #0f3040;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.35em 0.9em;
+  border-radius: var(--radius-full);
+  background: var(--sk-teal);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  color: #0f3040;
+  letter-spacing: -0.01em;
+}
+#centerProfile[data-center-slug="skaria"] .flagship-desc {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+}
+#centerProfile[data-center-slug="skaria"] .flagship-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -1254,24 +1633,25 @@
 }
 
 #centerProfile[data-center-slug="skaria"] .emvi-product-card {
+  display: flex;
+  flex-direction: column;
   border-radius: 17px;
   background: #fff;
   box-shadow: 0 4px 22px rgba(0, 0, 0, 0.10);
   overflow: hidden;
-  transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), opacity 0.6s var(--ease);
 }
 #centerProfile[data-center-slug="skaria"] .emvi-product-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.16);
 }
 
+/* Taller photo panel, cleanly cropped — no blurred/translucent seam */
 #centerProfile[data-center-slug="skaria"] .emvi-p-image {
-  width: 100%;
-  height: 148px;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 230px;
+  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -1312,10 +1692,12 @@
 #centerProfile[data-center-slug="skaria"] .emvi-icon-pill:hover { transform: scale(1.1); }
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-body {
+  flex: 1;
   padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 7px;
+  background: #fff;
 }
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-tags {
@@ -1348,8 +1730,12 @@
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-desc {
   font-size: 12px;
-  color: #6b7280;
+  color: #4b5563;
   line-height: 1.52;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-btns {
@@ -1384,11 +1770,21 @@
 }
 
 @media (max-width: 920px) {
-  #centerProfile[data-center-slug="skaria"] .profile-hero-inner {
-    grid-template-columns: 1fr;
+  #centerProfile[data-center-slug="skaria"] .skaria-hero-centered {
     padding-top: var(--space-8);
-    padding-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-hero-stats-strip {
     gap: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-about-grid,
+  #centerProfile[data-center-slug="skaria"] .why-grid {
+    grid-template-columns: 1fr;
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-about-media,
+  #centerProfile[data-center-slug="skaria"] .why-media {
+    order: -1;
   }
   #centerProfile[data-center-slug="skaria"] .vm-grid {
     grid-template-columns: 1fr;
@@ -1405,14 +1801,45 @@
   #centerProfile[data-center-slug="skaria"] .emvi-shop-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  #centerProfile[data-center-slug="skaria"] .emvi-h-image {
-    width: 100px;
+  #centerProfile[data-center-slug="skaria"] .service-photo-grid {
+    flex-wrap: wrap;
+  }
+  #centerProfile[data-center-slug="skaria"] .service-photo-card {
+    flex: 1 1 calc(33.333% - var(--space-4));
+    height: 320px;
+  }
+  #centerProfile[data-center-slug="skaria"] .flagship-card {
+    grid-template-columns: 1fr;
+  }
+  #centerProfile[data-center-slug="skaria"] .flagship-gallery {
+    aspect-ratio: 4 / 4.4;
+  }
+  #centerProfile[data-center-slug="skaria"] .flagship-body {
+    padding: var(--space-6) var(--space-5);
   }
 }
 
 @media (max-width: 640px) {
   #centerProfile[data-center-slug="skaria"] .skaria-title {
     font-size: clamp(2.8rem, 1.8rem + 6vw, 4.4rem);
+  }
+  /* Drop the stats card on phones — it doesn't earn its space at this width */
+  #centerProfile[data-center-slug="skaria"] .skaria-hero-stats-strip {
+    display: none;
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-in-page-nav {
+    margin-top: 0;
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-logo-wrap {
+    padding: var(--space-3);
+  }
+  #centerProfile[data-center-slug="skaria"] .skaria-logo-img {
+    width: 120px;
+    height: 120px;
+  }
+  #centerProfile[data-center-slug="skaria"] .why-media-collage {
+    max-width: 320px;
+    margin-inline: auto;
   }
   #centerProfile[data-center-slug="skaria"] .shop-grid {
     grid-template-columns: 1fr;
@@ -1442,14 +1869,14 @@
   #centerProfile[data-center-slug="skaria"] .emvi-blog-grid {
     grid-template-columns: 252px;
   }
-  #centerProfile[data-center-slug="skaria"] .emvi-h-card {
-    flex-direction: column;
+  #centerProfile[data-center-slug="skaria"] .service-photo-card {
+    flex: 1 1 100%;
+    height: 260px;
   }
-  #centerProfile[data-center-slug="skaria"] .emvi-h-image {
-    width: 100%;
-    min-height: 80px;
-    flex-direction: row;
-    gap: var(--space-3);
+  #centerProfile[data-center-slug="skaria"] .service-photo-card:hover,
+  #centerProfile[data-center-slug="skaria"] .service-photo-card:focus-visible,
+  #centerProfile[data-center-slug="skaria"] .service-photo-card.is-open {
+    flex-grow: 1;
   }
 }
 
@@ -1481,7 +1908,37 @@
 #centerProfile[data-center-slug="skaria"] .emvi-blog-date,
 #centerProfile[data-center-slug="skaria"] .emvi-blog-read,
 #centerProfile[data-center-slug="skaria"] .eyebrow,
+#centerProfile[data-center-slug="skaria"] .hero-stat-label,
 #centerProfile[data-center-slug="skaria"] .sk-footer-col h4 { font-size: 0.72rem; }
+
+/* — one font, no shouting caps: labels read like the rest of the page — */
+#centerProfile[data-center-slug="skaria"] .vm-label,
+#centerProfile[data-center-slug="skaria"] .about-kpi-label,
+#centerProfile[data-center-slug="skaria"] .founder-label,
+#centerProfile[data-center-slug="skaria"] .stats-vision-eye,
+#centerProfile[data-center-slug="skaria"] .rating-count,
+#centerProfile[data-center-slug="skaria"] .stat-row .label,
+#centerProfile[data-center-slug="skaria"] .hero-stat-label,
+#centerProfile[data-center-slug="skaria"] .profile-stats-card .contact-list dt,
+#centerProfile[data-center-slug="skaria"] .exp-tag,
+#centerProfile[data-center-slug="skaria"] .skaria-tab,
+#centerProfile[data-center-slug="skaria"] .profile-hero .pill,
+#centerProfile[data-center-slug="skaria"] .shop-cat,
+#centerProfile[data-center-slug="skaria"] .service-dur,
+#centerProfile[data-center-slug="skaria"] .team-card .credentials,
+#centerProfile[data-center-slug="skaria"] .blog-card-meta,
+#centerProfile[data-center-slug="skaria"] .emvi-badge,
+#centerProfile[data-center-slug="skaria"] .emvi-tag,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-label,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-date,
+#centerProfile[data-center-slug="skaria"] .emvi-blog-read,
+#centerProfile[data-center-slug="skaria"] .eyebrow,
+#centerProfile[data-center-slug="skaria"] .sk-footer-col h4 {
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
 
 /* — body / supporting copy — */
 #centerProfile[data-center-slug="skaria"] .vm-body,
@@ -1503,14 +1960,14 @@
 #centerProfile[data-center-slug="skaria"] .shop-empty,
 #centerProfile[data-center-slug="skaria"] .tab-empty,
 #centerProfile[data-center-slug="skaria"] .emvi-p-desc,
-#centerProfile[data-center-slug="skaria"] .emvi-h-desc,
 #centerProfile[data-center-slug="skaria"] .emvi-blog-desc,
 #centerProfile[data-center-slug="skaria"] .sk-footer-col li,
 #centerProfile[data-center-slug="skaria"] .sk-footer-col p,
 #centerProfile[data-center-slug="skaria"] .sk-footer-tagline { font-size: 0.9rem; }
 
 /* =================================================================
-   SKARIA HEADER — replaces oneMedicare shared header on this page   ================================================================= */
+   SKARIA HEADER
+   ================================================================= */
 #centerProfile[data-center-slug="skaria"] .site-header {
   background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid rgba(46, 207, 192, 0.20);
@@ -1533,11 +1990,12 @@
   color: var(--sk-teal);
 }
 #centerProfile[data-center-slug="skaria"] .sk-nav-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
   object-fit: contain;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(46, 207, 192, 0.28);
 }
 
 #centerProfile[data-center-slug="skaria"] .site-header .nav-link {
@@ -1561,6 +2019,23 @@
 #centerProfile[data-center-slug="skaria"] .site-header .btn-amber:hover {
   background: var(--sk-teal-deep);
   border-color: var(--sk-teal-deep);
+}
+
+/* Mobile navbar — icon-only WhatsApp button once the hamburger takes over, so the
+   header never has to fit a text label next to the logo + toggle on a narrow screen. */
+@media (max-width: 920px) {
+  #centerProfile[data-center-slug="skaria"] .site-header .btn-amber {
+    padding: 0.6em;
+    border-radius: 50%;
+    line-height: 0;
+  }
+  #centerProfile[data-center-slug="skaria"] .site-header .btn-amber .btn-label-long {
+    display: none;
+  }
+  #centerProfile[data-center-slug="skaria"] .sk-brand {
+    font-size: 1rem;
+    gap: var(--space-2);
+  }
 }
 
 /* =================================================================
