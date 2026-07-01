@@ -10,6 +10,11 @@ custom-branded standalone profile page. There is no package.json, build tool, bu
 suite. Everything is plain HTML/CSS/vanilla JS served directly from the filesystem or any static
 file server (e.g. `python3 -m http.server`).
 
+**`index.html` is the Skaria page**, not the oneMedicare directory home. The domain root is meant
+to land visitors on Skaria; the oneMedicare multi-tenant directory homepage lives at
+`directory.html` instead. This is a deliberate rename (Skaria swapped places with the former
+`index.html`) — don't "fix" it back without checking with the user first.
+
 ## Data model — single source of truth
 
 `assets/data.js` defines `window.OM_DATA` (`CATEGORIES`, `VALUE_PROPS`, `CENTERS`,
@@ -28,7 +33,8 @@ different pages:
 
 - `renderHeader()` / `renderFooter()` — shared oneMedicare chrome, driven by `[data-site-header]` /
   `[data-site-footer]` placeholder elements and a `data-active` attribute for nav highlighting.
-- `initHome()` — `index.html` (value props, category grid, featured centers, testimonials).
+  Their "Home" links point to `directory.html`, not `index.html`.
+- `initHome()` — `directory.html` (value props, category grid, featured centers, testimonials).
 - `initDirectory()` (+ `initCentersLanding()`) — `centers.html` (search, category filter pills,
   querystring sync via `?category=`, the animated 3D hero "orbit" scene).
 - `initCenterProfile()` — `center.html?slug=<slug>` generic tabbed profile renderer (offerings,
@@ -37,13 +43,13 @@ different pages:
 - `initOnboard()` — `onboard.html` multi-step form (mocked submission only, nothing is sent to a
   server; state lives in memory and is rendered into a review panel + fake `APP-<ref>` code).
 
-**`skaria.html` is the exception**: it does not use `initCenterProfile()`. It has its own
+**`index.html` is the exception**: it does not use `initCenterProfile()`. It has its own
 standalone renderer, `assets/skaria.js`, loaded after `app.js`, which fully replaces the shared
 header/footer content (`[data-site-header]`/`[data-site-footer]`) with Skaria-branded
 markup/nav and renders single-page sections with anchor-based scroll-spy navigation
 (`#overview #shop #services #team #reviews #journal #contact`) instead of the tab system used by
 `center.html`. Centers other than Skaria always go through `center.html?slug=...`; Skaria is
-special-cased in `app.js`'s `centerProfileHref()` to always link to `skaria.html` directly.
+special-cased in `app.js`'s `centerProfileHref()` to always link to `index.html` directly.
 
 ## Styling structure
 
@@ -59,7 +65,7 @@ special-cased in `app.js`'s `centerProfileHref()` to always link to `skaria.html
 
 When changing shared visual tokens, check both `centers.css` and `skaria.css` for scoped
 overrides that might need to move in tandem. When changing anything Skaria-specific, prefer
-editing `skaria.css`/`skaria.js`/`skaria.html` — don't touch the generic `center.html` path.
+editing `skaria.css`/`skaria.js`/`index.html` — don't touch the generic `center.html` path.
 
 ## Working without a build step
 

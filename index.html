@@ -3,121 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="oneMedicare is a multi-tenant health and wellness platform for hospitals, practices, and the people they care for." />
-  <title>oneMedicare | A multi-tenant journal of care</title>
+  <meta name="description" content="Skaria Medical Center: holistic telehealth specialties, products, remedies, team, and contact." />
+  <title>Skaria Medical Center</title>
+  <link rel="icon" type="image/png" href="assets/skaria-logo.png" />
   <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/skaria.css" />
 </head>
-<body>
-  <header class="site-header" data-site-header data-active="home"></header>
-
-  <main>
-    <section class="hero section">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Vol. 01 · Issue 01</p>
-          <h1>One platform for hospitals, <em>wellness</em> practices, &amp; the people they care for.</h1>
-          <p class="lede">
-            oneMedicare connects multi-category care centers in psychology, nutrition, holistic, wellness,
-            physical therapy, and more on a single tenant-isolated platform built for trust.
-          </p>
-          <div class="hero-actions">
-            <a href="onboard.html" class="btn btn-primary">Onboard a center →</a>
-            <a href="centers.html" class="btn btn-ghost">Browse the directory</a>
-          </div>
-          <div class="hero-meta">
-            <div class="hero-meta-item">
-              <span class="num">7+</span>
-              <span class="label">Sample centers</span>
-            </div>
-            <div class="hero-meta-item">
-              <span class="num">5</span>
-              <span class="label">Core categories</span>
-            </div>
-            <div class="hero-meta-item">
-              <span class="num">1</span>
-              <span class="label">Schema per tenant</span>
-            </div>
-          </div>
-        </div>
-        <div class="hero-scene-wrap">
-          <div class="hero-scene" id="homeHeroScene" data-hero-scene tabindex="0" aria-label="Interactive center preview. Move pointer to explore centers.">
-            <div class="hero-scene__ambient" aria-hidden="true">
-              <span class="hero-orb hero-orb--a"></span>
-              <span class="hero-orb hero-orb--b"></span>
-              <span class="hero-orb hero-orb--c"></span>
-              <span class="hero-scene__grid"></span>
-            </div>
-            <div class="hero-scene__stage" data-scene-stage>
-              <div class="hero-scene__orbit" data-scene-orbit role="listbox" aria-label="Select a center"></div>
-              <article class="glass-core" data-glass-core aria-live="polite"></article>
-            </div>
-            <p class="hero-scene__hint" aria-hidden="true">Move to explore · Click a card</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--rule-top">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Platform</p>
-          <h2>Built for multi-tenant care at scale.</h2>
-          <p>Schema isolation, unified identity, and category-flexible centers, designed for healthcare credibility.</p>
-        </div>
-        <div class="ledger-grid" id="valueGrid"></div>
-      </div>
-    </section>
-
-    <section class="section section--rule-top band-paper-deep">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Categories</p>
-          <h2>Every specialty, one directory.</h2>
-          <p>Centers may carry one or many practice types. Filter the directory by category or explore them all.</p>
-        </div>
-        <div class="category-grid" id="categoryGrid"></div>
-      </div>
-    </section>
-
-    <section class="section section--rule-top">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Featured</p>
-          <h2>Centers on the platform.</h2>
-          <p>Skaria leads this edition with holistic and wellness care in Portland, alongside centers across the country.</p>
-        </div>
-        <div class="featured-layout" id="featuredLayout"></div>
-      </div>
-    </section>
-
-    <section class="section section--rule-top band-paper-deep">
-      <div class="container">
-        <div class="section-head section-head--center reveal">
-          <p class="eyebrow">Voices</p>
-          <h2>What practitioners are saying.</h2>
-        </div>
-        <div class="testimonial-grid" id="testimonialGrid"></div>
-      </div>
-    </section>
-
-    <section class="section section--tight">
-      <div class="container">
-        <div class="cta-banner reveal">
-          <p class="eyebrow">Ready to launch?</p>
-          <h2>Bring your center to oneMedicare.</h2>
-          <p>Apply in minutes. Provision a tenant, add practitioners, and go live. All static for now, production-ready in design.</p>
-          <div class="cta-actions">
-            <a href="onboard.html" class="btn btn-primary">Start application</a>
-            <a href="skaria.html" class="btn btn-ghost">See Skaria profile</a>
-          </div>
-        </div>
-      </div>
-    </section>
+<body id="centerProfile" data-center-slug="skaria">
+  <header class="site-header" data-site-header></header>
+  <main class="skaria-page" aria-label="Skaria Center page">
+    <section class="profile-hero" id="skariaHero" aria-label="Skaria hero"></section>
+    <section class="skaria-content" id="skariaContent" aria-label="Skaria content"></section>
   </main>
-
   <footer class="site-footer" data-site-footer></footer>
 
   <script src="assets/data.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="assets/skaria.js"></script>
 </body>
 </html>

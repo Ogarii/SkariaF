@@ -160,7 +160,7 @@
     if (headerEl) {
       headerEl.innerHTML = `
         <div class="container header-inner">
-          <a href="skaria.html" class="sk-brand" aria-label="Skaria Medical Center home">
+          <a href="index.html" class="sk-brand" aria-label="Skaria Medical Center home">
             <img src="assets/skaria-logo.png" alt="" class="sk-nav-logo" aria-hidden="true" />
             Skaria <em>Medical Center</em>
           </a>

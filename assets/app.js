@@ -13,7 +13,7 @@
   function featuredCenter() { return CENTERS.find((c) => c.featured) || CENTERS[0]; }
   function centerProfileHref(center) {
     return center.slug === "skaria"
-      ? "skaria.html"
+      ? "index.html"
       : `center.html?slug=${encodeURIComponent(center.slug)}`;
   }
 
@@ -172,7 +172,7 @@
 
     el.innerHTML = `
       <div class="container header-inner">
-        <a href="index.html" class="brand" aria-label="oneMedicare home">
+        <a href="directory.html" class="brand" aria-label="oneMedicare home">
           <span class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"/></svg>
           </span>
@@ -182,7 +182,7 @@
           <span></span><span></span><span></span>
         </button>
         <nav class="site-nav" id="siteNav" aria-label="Primary">
-          <a href="index.html" class="nav-link${active === "home" ? " is-active" : ""}">Home</a>
+          <a href="directory.html" class="nav-link${active === "home" ? " is-active" : ""}">Home</a>
           <a href="centers.html" class="nav-link${active === "centers" ? " is-active" : ""}">Centers</a>
           <a href="onboard.html" class="nav-link${active === "onboard" ? " is-active" : ""}">Onboard</a>
         </nav>
@@ -214,7 +214,7 @@
     el.innerHTML = `
       <div class="container footer-top">
         <div class="footer-brand">
-          <a href="index.html" class="brand">
+          <a href="directory.html" class="brand">
             <span class="brand-mark" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"/></svg>
             </span>
@@ -225,9 +225,9 @@
         <div class="footer-col">
           <h4>Explore</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="directory.html">Home</a></li>
             <li><a href="centers.html">Center directory</a></li>
-            <li><a href="skaria.html">Skaria profile</a></li>
+            <li><a href="index.html">Skaria profile</a></li>
           </ul>
         </div>
         <div class="footer-col">
