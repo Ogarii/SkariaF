@@ -73,6 +73,104 @@
   margin-right: auto;
 }
 
+/* Hero ingredient photo strip — a continuous marquee, like train cars passing
+   a fixed viewer; hover pauses the strip and reveals the ingredient's benefit. */
+#centerProfile[data-center-slug="skaria"] .hero-ing-track {
+  position: relative;
+  width: 100%;
+  margin-top: var(--space-6);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-scroll {
+  display: flex;
+  width: max-content;
+  gap: var(--space-4);
+  padding-inline: var(--space-4);
+  animation: hero-ing-marquee 50s linear infinite;
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-track:hover .hero-ing-scroll {
+  animation-play-state: paused;
+}
+@keyframes hero-ing-marquee {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #centerProfile[data-center-slug="skaria"] .hero-ing-scroll {
+    animation: none;
+  }
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-card {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 6px 18px -6px rgba(15, 48, 64, 0.35), 0 0 0 3px #fff, 0 0 0 4px rgba(46, 207, 192, 0.25);
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:hover,
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:focus-visible {
+  transform: translateY(-5px) scale(1.06);
+  outline: none;
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:hover img,
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:focus-visible img {
+  transform: scale(1.12);
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px;
+  gap: 2px;
+  background: rgba(10, 31, 40, 0.82);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:hover .hero-ing-overlay,
+#centerProfile[data-center-slug="skaria"] .hero-ing-card:focus-visible .hero-ing-overlay {
+  opacity: 1;
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-overlay strong {
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+#centerProfile[data-center-slug="skaria"] .hero-ing-overlay span {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.56rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 560px) {
+  #centerProfile[data-center-slug="skaria"] .hero-ing-card {
+    width: 64px;
+    height: 64px;
+  }
+  #centerProfile[data-center-slug="skaria"] .hero-ing-overlay strong {
+    font-size: 0.58rem;
+  }
+  #centerProfile[data-center-slug="skaria"] .hero-ing-overlay span {
+    font-size: 0.5rem;
+  }
+}
+
 /* Stats strip — horizontal band below the hero copy */
 #centerProfile[data-center-slug="skaria"] .skaria-hero-stats-strip {
   position: relative;
@@ -568,6 +666,24 @@
   line-height: 1.68;
 }
 
+/* Credential badges (founder strip + team card) */
+#centerProfile[data-center-slug="skaria"] .founder-badges {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+#centerProfile[data-center-slug="skaria"] .founder-badge-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .founder-badge-img:hover {
+  transform: scale(1.08);
+}
+
 /* Share button */
 #centerProfile[data-center-slug="skaria"] .skaria-share-btn {
   display: inline-flex;
@@ -664,17 +780,11 @@
   height: 44%;
   z-index: 3;
 }
-#centerProfile[data-center-slug="skaria"] .why-media-logo {
-  position: absolute;
-  top: 6%;
-  right: 2%;
-  width: 62px;
-  height: 62px;
-  object-fit: contain;
-  background: #fff;
-  border-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 10px 22px -4px rgba(46, 207, 192, 0.42);
+#centerProfile[data-center-slug="skaria"] .why-media-tile--d {
+  top: 4%;
+  right: 4%;
+  width: 34%;
+  height: 30%;
   z-index: 4;
 }
 
@@ -1632,6 +1742,12 @@
   margin-top: var(--space-7);
 }
 
+#centerProfile[data-center-slug="skaria"] .ingredients-subhead {
+  margin-top: var(--space-9);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(46, 207, 192, 0.18);
+}
+
 #centerProfile[data-center-slug="skaria"] .emvi-product-card {
   display: flex;
   flex-direction: column;
@@ -1653,6 +1769,7 @@
   height: 230px;
   flex-shrink: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-img {
@@ -1663,6 +1780,39 @@
 }
 #centerProfile[data-center-slug="skaria"] .emvi-product-card:hover .emvi-p-img {
   transform: scale(1.07);
+}
+
+#centerProfile[data-center-slug="skaria"] .emvi-p-zoom-hint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 48, 64, 0.28);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  pointer-events: none;
+}
+#centerProfile[data-center-slug="skaria"] .emvi-product-card:hover .emvi-p-zoom-hint,
+#centerProfile[data-center-slug="skaria"] .emvi-p-image:focus-visible .emvi-p-zoom-hint {
+  opacity: 1;
+}
+#centerProfile[data-center-slug="skaria"] .emvi-p-zoom-hint svg {
+  width: 34px;
+  height: 34px;
+  padding: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+#centerProfile[data-center-slug="skaria"] .emvi-p-size {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
 }
 
 #centerProfile[data-center-slug="skaria"] .emvi-p-actions {
@@ -2176,5 +2326,176 @@
     flex-direction: column;
     gap: var(--space-2);
     text-align: center;
+  }
+}
+
+/* =================================================================
+   PRODUCT MODAL — click a product photo to view it larger, with a
+   next/prev + auto-playing slideshow across the whole catalog
+   ================================================================= */
+#centerProfile[data-center-slug="skaria"] .product-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease), visibility 0.25s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 22, 28, 0.72);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  max-width: 880px;
+  width: 100%;
+  max-height: 86vh;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 0.25s var(--ease);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal.is-open .product-modal-panel {
+  transform: none;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f3040;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-media {
+  position: relative;
+  background: #0a1f28;
+  min-height: 320px;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f3040;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.15s;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-nav:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-nav--prev { left: 14px; }
+#centerProfile[data-center-slug="skaria"] .product-modal-nav--next { right: 14px; }
+#centerProfile[data-center-slug="skaria"] .product-modal-play {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5em 1em;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(10, 31, 40, 0.55);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-play:hover {
+  background: rgba(10, 31, 40, 0.75);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-body {
+  padding: var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #0f3040;
+  letter-spacing: -0.01em;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-price {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--sk-teal);
+  flex-shrink: 0;
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-desc {
+  font-size: 0.96rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+}
+#centerProfile[data-center-slug="skaria"] .product-modal-whatsapp {
+  margin-top: auto;
+  align-self: flex-start;
+}
+#centerProfile[data-center-slug="skaria"].modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  #centerProfile[data-center-slug="skaria"] .product-modal-panel {
+    grid-template-columns: 1fr;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  #centerProfile[data-center-slug="skaria"] .product-modal-media {
+    min-height: 240px;
   }
 }

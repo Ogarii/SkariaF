@@ -14,6 +14,33 @@
     "assets/herbs/african-sausage-tree.jpg",
   ];
 
+  const HERO_INGREDIENTS = [
+    { name: "Beets",           image: "assets/herbs/beets.jpg",               benefit: "Boosts stamina & blood flow" },
+    { name: "Blueberries",     image: "assets/herbs/blueberries.jpg",         benefit: "Rich in antioxidants" },
+    { name: "Strawberry",      image: "assets/herbs/strawberry.jpg",          benefit: "Supports immunity & skin" },
+    { name: "Vanilla",         image: "assets/herbs/vanilla.jpg",             benefit: "Calms & soothes the mind" },
+    { name: "Moringa",         image: "assets/herbs/moringa.jpg",             benefit: "Packed with vitamins" },
+    { name: "Turmeric",        image: "assets/herbs/turmeric.jpg",            benefit: "Eases inflammation" },
+    { name: "Hibiscus",        image: "assets/herbs/hibiscus.jpg",            benefit: "Supports healthy blood pressure" },
+    { name: "Honey",           image: "assets/herbs/honey.jpg",               benefit: "Soothes & boosts immunity" },
+    { name: "Garlic",          image: "assets/herbs/garlic.jpg",              benefit: "Supports heart health" },
+    { name: "Aloe Vera",       image: "assets/herbs/aloe-vera.jpg",           benefit: "Soothes skin & digestion" },
+    { name: "Cinnamon",        image: "assets/herbs/cinnamon.jpg",            benefit: "Balances blood sugar" },
+    { name: "Guava",           image: "assets/herbs/guava.jpg",               benefit: "Aids digestion" },
+    { name: "Neem",            image: "assets/herbs/neem.jpg",                benefit: "Supports oral & skin health" },
+    { name: "Rosemary",        image: "assets/herbs/rosemary.jpg",            benefit: "Sharpens memory & focus" },
+    { name: "Chamomile",       image: "assets/herbs/chamomile.jpg",           benefit: "Promotes restful sleep" },
+    { name: "Dandelion",       image: "assets/herbs/dandelion.jpg",           benefit: "Supports liver & detox" },
+    { name: "Mint",            image: "assets/herbs/mint.jpg",                benefit: "Eases digestive discomfort" },
+    { name: "Thyme",           image: "assets/herbs/thyme.jpg",               benefit: "Supports easy breathing" },
+    { name: "Cloves",          image: "assets/herbs/cloves.jpg",              benefit: "Aids digestion" },
+    { name: "Avocado",         image: "assets/herbs/avocado.jpg",             benefit: "Nourishes heart & skin" },
+    { name: "Gooseberry",      image: "assets/herbs/gooseberries.jpg",        benefit: "Boosts immunity" },
+    { name: "Mulberry",        image: "assets/herbs/mulberry.jpg",            benefit: "Balances blood sugar" },
+    { name: "Stinging Nettle", image: "assets/herbs/stinging-nettle.jpg",     benefit: "Supports bone health" },
+    { name: "African Sausage Tree", image: "assets/herbs/african-sausage-tree.jpg", benefit: "Supports prostate health" },
+  ];
+
   function catName(id) {
     return ((CATEGORIES || []).find((c) => c.id === id) || {}).name || id;
   }
@@ -58,6 +85,119 @@
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
     items.forEach((el) => obs.observe(el));
+  }
+
+  function initProductModal(shopProducts, whatsapp) {
+    const triggers = $$("[data-open-product]");
+    if (!triggers.length || !shopProducts.length) return;
+
+    const modal = document.createElement("div");
+    modal.className = "product-modal";
+    modal.setAttribute("aria-hidden", "true");
+    modal.innerHTML = `
+      <div class="product-modal-backdrop" data-modal-close></div>
+      <div class="product-modal-panel" role="dialog" aria-modal="true" aria-label="Product details">
+        <button type="button" class="product-modal-close" data-modal-close aria-label="Close">&times;</button>
+        <div class="product-modal-media">
+          <img src="" alt="" class="product-modal-img" />
+          <button type="button" class="product-modal-nav product-modal-nav--prev" data-modal-prev aria-label="Previous product">&lsaquo;</button>
+          <button type="button" class="product-modal-nav product-modal-nav--next" data-modal-next aria-label="Next product">&rsaquo;</button>
+          <button type="button" class="product-modal-play" data-modal-play aria-label="Play slideshow">
+            <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg>
+            <svg class="icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="4" width="5" height="16"/><rect x="14" y="4" width="5" height="16"/></svg>
+            <span class="product-modal-play-label">Slideshow</span>
+          </button>
+        </div>
+        <div class="product-modal-body">
+          <span class="emvi-tag product-modal-cat"></span>
+          <div class="product-modal-title-row">
+            <h3 class="product-modal-title"></h3>
+            <span class="product-modal-price"></span>
+          </div>
+          <p class="product-modal-desc"></p>
+          <a class="btn btn-amber product-modal-whatsapp" target="_blank" rel="noopener">Inquire on WhatsApp</a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const img      = $(".product-modal-img", modal);
+    const catEl    = $(".product-modal-cat", modal);
+    const titleEl  = $(".product-modal-title", modal);
+    const priceEl  = $(".product-modal-price", modal);
+    const descEl   = $(".product-modal-desc", modal);
+    const waEl     = $(".product-modal-whatsapp", modal);
+    const playBtn  = $("[data-modal-play]", modal);
+    const iconPlay = $(".icon-play", modal);
+    const iconPause = $(".icon-pause", modal);
+    const playLabel = $(".product-modal-play-label", modal);
+
+    let index = 0;
+    let timer = null;
+
+    function render() {
+      const p = shopProducts[index];
+      img.src = p.image || "";
+      img.alt = p.name;
+      catEl.textContent = p.category || "";
+      titleEl.textContent = p.name + (p.size ? ` (${p.size})` : "");
+      priceEl.textContent = p.price || "";
+      descEl.textContent = p.description || "";
+      waEl.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Hi, I am interested in ' + p.name)}`;
+    }
+
+    function show(i) {
+      index = (i + shopProducts.length) % shopProducts.length;
+      render();
+    }
+    function next() { show(index + 1); }
+    function prev() { show(index - 1); }
+
+    function stopSlideshow() {
+      if (timer) { clearInterval(timer); timer = null; }
+      iconPlay.style.display = "";
+      iconPause.style.display = "none";
+      playLabel.textContent = "Slideshow";
+    }
+    function startSlideshow() {
+      timer = setInterval(next, 2600);
+      iconPlay.style.display = "none";
+      iconPause.style.display = "";
+      playLabel.textContent = "Pause";
+    }
+
+    function open(i) {
+      show(i);
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+    }
+    function close() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+      stopSlideshow();
+    }
+
+    triggers.forEach((el) => {
+      const idx = Number(el.dataset.openProduct);
+      el.addEventListener("click", () => open(idx));
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(idx); }
+      });
+    });
+
+    $$("[data-modal-close]", modal).forEach((el) => el.addEventListener("click", close));
+    $("[data-modal-next]", modal).addEventListener("click", next);
+    $("[data-modal-prev]", modal).addEventListener("click", prev);
+    playBtn.addEventListener("click", () => { timer ? stopSlideshow() : startSlideshow(); });
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    });
   }
 
   function initFlagshipGallery() {
@@ -135,6 +275,7 @@
 
     const products = center.products || [];
     const flagship = products.find((p) => p.flagship);
+    const ingredients = center.ingredients || [];
     const blogs    = center.blogs    || [];
     const pracs    = (PRACTITIONERS || []).filter((p) => p.centerSlug === "skaria");
     const reviews  = (TESTIMONIALS  || []).filter((t) => t.centerSlug === "skaria");
@@ -148,12 +289,19 @@
     const integratesText = (ov.find((p) => /^Skaria integrates/i.test(p)) || "");
     const missionText    = center.description;
 
-    const expTags = (center.services || []).slice(0, 8).map((s) => {
-      const short = s.name
-        .replace(/\s*(Program|Management|Treatment|Support|Stabilization|Care|Reset)\s*$/i, "")
-        .trim();
-      return `<span class="exp-tag">${short}</span>`;
-    }).join("");
+    function heroIngredientCard(ing) {
+      return `
+        <div class="hero-ing-card" tabindex="0" aria-label="${ing.name}: ${ing.benefit}">
+          <img src="${ing.image}" alt="${ing.name}" loading="lazy" />
+          <div class="hero-ing-overlay">
+            <strong>${ing.name}</strong>
+            <span>${ing.benefit}</span>
+          </div>
+        </div>`;
+    }
+    // Rendered twice back-to-back so the CSS marquee can scroll from 0 to -50%
+    // and loop seamlessly, like train cars passing a fixed viewer.
+    const heroIngredientsHtml = HERO_INGREDIENTS.map(heroIngredientCard).join("");
 
     // ── Skaria header ──
     const headerEl = document.querySelector('[data-site-header]');
@@ -213,7 +361,9 @@
         </div>
         <h1 class="skaria-title">Skaria<em>Medical Center</em></h1>
         <p class="skaria-tagline">${center.tagline}</p>
-        ${expTags ? `<div class="exp-tags-row" aria-label="Areas of care">${expTags}</div>` : ""}
+        <div class="hero-ing-track" id="heroIngTrack" aria-label="Ingredients we work with">
+          <div class="hero-ing-scroll">${heroIngredientsHtml}${heroIngredientsHtml}</div>
+        </div>
         ${pills(center.categories)}
         <div class="profile-hero-actions">
           <a class="btn btn-amber" href="#contact">Book a consultation</a>
@@ -337,6 +487,10 @@
                 <div>
                   <span class="founder-label">Founder</span>
                   <p class="founder-body">${founderText}</p>
+                  ${pracs[0] && pracs[0].badges && pracs[0].badges.length ? `
+                  <div class="founder-badges">
+                    ${pracs[0].badges.map((b) => `<img src="${b.image}" alt="${b.label}" title="${b.label}" class="founder-badge-img" loading="lazy" />`).join("")}
+                  </div>` : ''}
                 </div>
               </div>` : ''}
             </div>
@@ -369,7 +523,7 @@
                 <img src="assets/herbs/turmeric.jpg" alt="Turmeric" class="why-media-tile why-media-tile--a" loading="lazy" />
                 <img src="assets/herbs/aloe-vera.jpg" alt="Aloe vera" class="why-media-tile why-media-tile--b" loading="lazy" />
                 <img src="assets/herbs/honey.jpg" alt="Raw honey" class="why-media-tile why-media-tile--c" loading="lazy" />
-                <img src="assets/skaria-logo.png" alt="Skaria Medical" class="why-media-logo" />
+                <img src="assets/herbs/hibiscus.jpg" alt="Hibiscus" class="why-media-tile why-media-tile--d" loading="lazy" />
               </div>
             </div>
           </div>
@@ -427,13 +581,16 @@
             ${products.length
               ? `<div class="emvi-shop-grid">${products.filter((p) => !p.flagship).map((p, i) => `
                 <article class="emvi-product-card reveal-up" style="transition-delay:${Math.min(i, 6) * 0.06}s">
-                  <div class="emvi-p-image${p.image ? '' : ' sk-marble-bg'}">
+                  <div class="emvi-p-image${p.image ? '' : ' sk-marble-bg'}" data-open-product="${i}" role="button" tabindex="0" aria-label="View ${p.name} photo">
                     ${p.image ? `<img src="${p.image}" alt="${p.name}" class="emvi-p-img" loading="lazy" />` : ''}
+                    <div class="emvi-p-zoom-hint" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
                     <div class="emvi-p-actions">
                       <button class="emvi-icon-pill" aria-label="Save ${p.name}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#319795" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                       </button>
-                      <a class="emvi-icon-pill" href="https://wa.me/${center.contact.whatsapp}?text=${encodeURIComponent('Hi, I am interested in ' + p.name)}" target="_blank" rel="noopener" aria-label="Ask about ${p.name} on WhatsApp">
+                      <a class="emvi-icon-pill" href="https://wa.me/${center.contact.whatsapp}?text=${encodeURIComponent('Hi, I am interested in ' + p.name)}" target="_blank" rel="noopener" aria-label="Ask about ${p.name} on WhatsApp" onclick="event.stopPropagation()">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                       </a>
                     </div>
@@ -441,7 +598,7 @@
                   <div class="emvi-p-body">
                     <div class="emvi-p-tags"><span class="emvi-tag">${p.category}</span></div>
                     <div class="emvi-p-title-row">
-                      <div class="emvi-p-title">${p.name}</div>
+                      <div class="emvi-p-title">${p.name}${p.size ? `<span class="emvi-p-size"> &middot; ${p.size}</span>` : ''}</div>
                       <div class="emvi-p-price">${p.price}</div>
                     </div>
                     <div class="emvi-p-desc">${p.description}</div>
@@ -452,6 +609,33 @@
                 </article>`).join("")}</div>`
               : `<p class="shop-empty">No products listed yet.</p>`
             }
+
+            ${ingredients.length ? `
+            <div class="ingredients-subhead">
+              ${sectionHead("Raw Ingredients", "Straight from nature", "The individual herbs, roots, and botanicals we use to make every Skaria product.")}
+            </div>
+            <div class="emvi-shop-grid">${ingredients.map((p, i) => {
+              const idx = products.filter((pp) => !pp.flagship).length + i;
+              return `
+                <article class="emvi-product-card reveal-up" style="transition-delay:${Math.min(i, 6) * 0.06}s">
+                  <div class="emvi-p-image${p.image ? '' : ' sk-marble-bg'}" data-open-product="${idx}" role="button" tabindex="0" aria-label="View ${p.name} photo">
+                    ${p.image ? `<img src="${p.image}" alt="${p.name}" class="emvi-p-img" loading="lazy" />` : ''}
+                    <div class="emvi-p-zoom-hint" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                  </div>
+                  <div class="emvi-p-body">
+                    <div class="emvi-p-tags"><span class="emvi-tag">${p.category}</span></div>
+                    <div class="emvi-p-title-row">
+                      <div class="emvi-p-title">${p.name}</div>
+                    </div>
+                    <div class="emvi-p-desc">${p.description}</div>
+                    <div class="emvi-p-btns">
+                      <a class="emvi-cta-btn" href="https://wa.me/${center.contact.whatsapp}?text=${encodeURIComponent('Hi, I am interested in ' + p.name)}" target="_blank" rel="noopener">Ask about this</a>
+                    </div>
+                  </div>
+                </article>`;
+            }).join("")}</div>` : ""}
           </div>
         </div>
       </section>
@@ -472,6 +656,10 @@
                   <p class="role">${p.role}</p>
                   <p class="credentials">${p.credentials}</p>
                   <p class="bio">${p.bio}</p>
+                  ${p.badges && p.badges.length ? `
+                  <div class="founder-badges">
+                    ${p.badges.map((b) => `<img src="${b.image}" alt="${b.label}" title="${b.label}" class="founder-badge-img" loading="lazy" />`).join("")}
+                  </div>` : ''}
                   ${p.linkedin ? `<a class="team-linkedin" href="${p.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="${p.firstName} on LinkedIn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                     LinkedIn
@@ -531,8 +719,9 @@
           <div class="skaria-contact-card">
             <dl class="contact-list">
               <div><dt>Email</dt><dd><a href="mailto:${center.contact.email}">${center.contact.email}</a></dd></div>
-              <div><dt>US (Google Voice)</dt><dd><a href="tel:${center.contact.phone.replace(/\D/g, '')}">${center.contact.phone}</a></dd></div>
+              <div><dt>US Phone</dt><dd><a href="tel:${center.contact.phone.replace(/\D/g, '')}">${center.contact.phone}</a></dd></div>
               <div><dt>WhatsApp</dt><dd><a href="https://wa.me/${center.contact.whatsapp}">+254 795 920 217</a></dd></div>
+              ${center.contact.website ? `<div><dt>Website</dt><dd><a href="${center.contact.website}" target="_blank" rel="noopener">${center.contact.website.replace(/^https?:\/\//, '')}</a></dd></div>` : ""}
               <div><dt>Address</dt><dd>${center.contact.address}</dd></div>
               <div><dt>Hours</dt><dd>${center.contact.hours}</dd></div>
             </dl>
@@ -555,6 +744,7 @@
     initScrollReveal();
     initFlagshipGallery();
     initServicePhotoCards();
+    initProductModal(products.filter((p) => !p.flagship).concat(ingredients), center.contact.whatsapp);
     requestAnimationFrame(() => hero.classList.add("is-visible"));
 
     // ── Skaria footer ──
@@ -594,6 +784,7 @@
               <li><a href="mailto:${center.contact.email}">${center.contact.email}</a></li>
               <li><a href="https://wa.me/${center.contact.whatsapp}">+254 795 920 217 (WhatsApp)</a></li>
               <li><a href="tel:${center.contact.phone.replace(/\D/g, '')}">${center.contact.phone}</a></li>
+              ${center.contact.website ? `<li><a href="${center.contact.website}" target="_blank" rel="noopener">${center.contact.website.replace(/^https?:\/\//, '')}</a></li>` : ""}
               <li>${center.contact.address}</li>
             </ul>
           </div>
