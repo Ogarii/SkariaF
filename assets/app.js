@@ -1126,7 +1126,7 @@
           <div class="spotlight-copy">
             <p class="spotlight-eyebrow">Signature catalog</p>
             <h2>Herbal protocols + modern clinical care</h2>
-            <p class="lede">Browse what Skaria offers first. Services and remedies are designed to fit real daily rhythm—food, movement, and supportive botanicals.</p>
+            <p class="lede">Browse what Skaria offers first. Services and remedies are designed to fit real daily rhythm: food, movement, and supportive botanicals.</p>
             <div class="spotlight-actions">
               <button type="button" class="btn btn-amber" data-tab-link="offerings">Explore offerings</button>
               <button type="button" class="btn btn-outline-light" data-tab-link="contact">Talk to the team</button>

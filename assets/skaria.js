@@ -200,6 +200,85 @@
     });
   }
 
+  function initArticleModal(blogs) {
+    const triggers = $$("[data-open-article]");
+    if (!triggers.length || !blogs.length) return;
+
+    const modal = document.createElement("div");
+    modal.className = "article-modal";
+    modal.setAttribute("aria-hidden", "true");
+    modal.innerHTML = `
+      <div class="article-modal-backdrop" data-modal-close></div>
+      <div class="article-modal-panel" role="dialog" aria-modal="true" aria-label="Article">
+        <button type="button" class="article-modal-close" data-modal-close aria-label="Close">&times;</button>
+        <div class="article-modal-media">
+          <img src="" alt="" class="article-modal-img" />
+        </div>
+        <div class="article-modal-body">
+          <div class="article-modal-label"></div>
+          <h3 class="article-modal-title"></h3>
+          <p class="article-modal-excerpt"></p>
+          <div class="article-modal-nav">
+            <button type="button" class="article-modal-nav-btn" data-modal-prev>&lsaquo; Previous</button>
+            <button type="button" class="article-modal-nav-btn" data-modal-next>Next &rsaquo;</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const img     = $(".article-modal-img", modal);
+    const labelEl = $(".article-modal-label", modal);
+    const titleEl = $(".article-modal-title", modal);
+    const excEl   = $(".article-modal-excerpt", modal);
+
+    let index = 0;
+
+    function render() {
+      const b = blogs[index];
+      img.src = b.image || "";
+      img.alt = b.title;
+      labelEl.textContent = `${fmtDate(b.date)} · ${b.author}`;
+      titleEl.textContent = b.title;
+      excEl.textContent = b.excerpt || "";
+      modal.querySelector(".article-modal-panel").scrollTop = 0;
+    }
+    function show(i) { index = (i + blogs.length) % blogs.length; render(); }
+    function next() { show(index + 1); }
+    function prev() { show(index - 1); }
+
+    function open(i) {
+      show(i);
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+    }
+    function close() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    triggers.forEach((el) => {
+      const idx = Number(el.dataset.openArticle);
+      el.addEventListener("click", () => open(idx));
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(idx); }
+      });
+    });
+
+    $$("[data-modal-close]", modal).forEach((el) => el.addEventListener("click", close));
+    $("[data-modal-next]", modal).addEventListener("click", next);
+    $("[data-modal-prev]", modal).addEventListener("click", prev);
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    });
+  }
+
   function initFlagshipGallery() {
     const gallery = $("[data-flagship-gallery]");
     if (!gallery) return;
@@ -421,7 +500,6 @@
               <div class="service-photo-hover">
                 <div class="service-photo-badges">
                   <span class="emvi-badge">${s.duration}</span>
-                  <span class="emvi-badge">${s.price}</span>
                 </div>
                 <p class="service-photo-desc">${s.description}</p>
                 <div class="service-photo-actions">
@@ -462,7 +540,7 @@
                 </div>
                 <div class="about-kpi-card">
                   <span class="about-kpi-label">Products</span>
-                  <span class="about-kpi-value">${products.length || "—"}</span>
+                  <span class="about-kpi-value">${products.length || "0"}</span>
                 </div>
                 <div class="about-kpi-card">
                   <span class="about-kpi-label">Years active</span>
@@ -490,7 +568,8 @@
                   ${pracs[0] && pracs[0].badges && pracs[0].badges.length ? `
                   <div class="founder-badges">
                     ${pracs[0].badges.map((b) => `<img src="${b.image}" alt="${b.label}" title="${b.label}" class="founder-badge-img" loading="lazy" />`).join("")}
-                  </div>` : ''}
+                  </div>
+                  <p class="founder-badges-note">Nationally recognized for excellence in healthcare, a Marquis Who&rsquo;s Who honored listee and verified among today&rsquo;s influential women in medicine.</p>` : ''}
                 </div>
               </div>` : ''}
             </div>
@@ -539,6 +618,10 @@
         <div class="skaria-shop-inner">
           <div class="container">
             ${sectionHead("Shop", "Our products", "Traditional herbal blends, wellness supports, and clinical-grade protocols from Skaria&rsquo;s catalog.")}
+            <p class="shop-practitioner-note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              All products are formulated by a Certified Traditional Medical Practitioner.
+            </p>
             ${flagship ? `
             <article class="flagship-card reveal-up" aria-label="Flagship product: ${flagship.name}">
               <div class="flagship-gallery" data-flagship-gallery>
@@ -696,9 +779,9 @@
           ${sectionHead("Journal", "Blog", "")}
           ${blogs.length
             ? `<div class="emvi-blog-grid">${blogs.map((b, i) => `
-              <article class="emvi-blog-card reveal-up"${b.image ? ` style="background-image:url('${b.image}');transition-delay:${Math.min(i, 6) * 0.08}s"` : ` style="transition-delay:${Math.min(i, 6) * 0.08}s"`}>
+              <article class="emvi-blog-card reveal-up"${b.image ? ` style="background-image:url('${b.image}');transition-delay:${Math.min(i, 6) * 0.08}s"` : ` style="transition-delay:${Math.min(i, 6) * 0.08}s"`} data-open-article="${i}" role="button" tabindex="0" aria-label="Read: ${b.title}">
                 <div class="emvi-blog-content">
-                  <div class="emvi-blog-label">${b.readMin} min read &middot; ${b.author.split(',')[0]}</div>
+                  <div class="emvi-blog-label">${b.author.split(',')[0]}</div>
                   <h3 class="emvi-blog-title">${b.title}</h3>
                   <p class="emvi-blog-desc">${b.excerpt}</p>
                   <div class="emvi-blog-footer">
@@ -715,7 +798,7 @@
       <!-- CONTACT -->
       <section class="section skaria-sec" id="contact">
         <div class="container">
-          ${sectionHead("Contact", "Get in touch", "Reach out by email or stop by one of our telehealth sessions &mdash; Monday through Saturday.")}
+          ${sectionHead("Contact", "Get in touch", "Reach out by email or stop by one of our telehealth sessions, Monday through Saturday.")}
           <div class="skaria-contact-card">
             <dl class="contact-list">
               <div><dt>Email</dt><dd><a href="mailto:${center.contact.email}">${center.contact.email}</a></dd></div>
@@ -745,6 +828,7 @@
     initFlagshipGallery();
     initServicePhotoCards();
     initProductModal(products.filter((p) => !p.flagship).concat(ingredients), center.contact.whatsapp);
+    initArticleModal(blogs);
     requestAnimationFrame(() => hero.classList.add("is-visible"));
 
     // ── Skaria footer ──
@@ -762,6 +846,9 @@
               </a>
               <a href="mailto:${center.contact.email}" class="sk-footer-social" aria-label="Email">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              </a>
+              <a href="https://www.tiktok.com/@skariamedicalcenter?_r=1&_t=ZT-97hYVuSWrBF" target="_blank" rel="noopener" class="sk-footer-social" aria-label="TikTok">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
               </a>
             </div>
           </div>
@@ -808,7 +895,7 @@
       shareBtn.addEventListener("click", async () => {
         const shareData = {
           title: "Skaria Medical Center",
-          text: "Check out Skaria Medical Center — holistic telehealth blending African herbalism and Western clinical medicine.",
+          text: "Check out Skaria Medical Center: holistic telehealth blending African herbalism and Western clinical medicine.",
           url: window.location.href,
         };
         if (navigator.share) {
